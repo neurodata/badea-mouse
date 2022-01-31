@@ -1,0 +1,718 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brain Volume Analysis &#8212; Mouse Connectomes</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Mouse Brain and Alzheimer’s Disease" href="coverpage.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/nd_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Mouse Connectomes</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="coverpage.html">
+   Mouse Brain and Alzheimer’s Disease
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Brain Volume Covariances
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Brain Volume Analysis
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/2022-01-28-volume-analysis.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/neurodata/badea-mouse"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/neurodata/badea-mouse/issues/new?title=Issue%20on%20page%20%2F2022-01-28-volume-analysis.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/neurodata/badea-mouse/main?urlpath=tree/badea-mouse/2022-01-28-volume-analysis.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-whether-group-volumes-are-significantly-different">
+   Testing whether group volumes are significantly different
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#testing-for-most-significantly-different-regions">
+     Testing for most significantly different regions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-for-differences-in-the-brain-volume-covariance">
+   Testing for differences in the brain volume covariance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-for-differences-in-pairwise-covariances">
+   Testing for differences in pairwise covariances
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Brain Volume Analysis</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-whether-group-volumes-are-significantly-different">
+   Testing whether group volumes are significantly different
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#testing-for-most-significantly-different-regions">
+     Testing for most significantly different regions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-for-differences-in-the-brain-volume-covariance">
+   Testing for differences in the brain volume covariance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-for-differences-in-pairwise-covariances">
+   Testing for differences in pairwise covariances
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="brain-volume-analysis">
+<h1>Brain Volume Analysis<a class="headerlink" href="#brain-volume-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">hyppo</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotnine</span> <span class="k">as</span> <span class="nn">p9</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Read the data</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/key.csv&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/mouses-volumes.csv&#39;</span><span class="p">)</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">DWI</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">genotypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;APOE22&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE33&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE44&#39;</span><span class="p">]</span>
+
+
+<span class="n">gen_animals</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">:</span>
+    <span class="n">gen_animals</span><span class="p">[</span><span class="n">genotype</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="s1">&#39;Genotype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">genotype</span><span class="p">][</span><span class="s1">&#39;DWI&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">vol_dat</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">}</span>
+    
+<span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">:</span>
+    <span class="n">vol_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gen_animals</span><span class="p">[</span><span class="n">genotype</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,</span><span class="mi">1</span><span class="p">:]</span>
+    
+<span class="c1">## Compute correlations</span>
+<span class="n">cor_dat</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="n">gp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">genotype</span><span class="p">,</span> <span class="n">dat</span><span class="p">)</span> <span class="ow">in</span> <span class="n">vol_dat</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+
+<span class="c1">## Plot to make sure nothing is wrong</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">genotype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cor_dat</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">genotype</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2022-01-28-volume-analysis_2_0.png" src="_images/2022-01-28-volume-analysis_2_0.png" />
+</div>
+</div>
+<div class="section" id="testing-whether-group-volumes-are-significantly-different">
+<h2>Testing whether group volumes are significantly different<a class="headerlink" href="#testing-whether-group-volumes-are-significantly-different" title="Permalink to this headline">¶</a></h2>
+<p>We compute 3-sample distance correlation to see if there is any differences in the 3 groups. Specifically, we test whether the distribution of brain volumes from at least two genotypes are different.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
+
+<span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">dat</span> <span class="k">for</span> <span class="p">(</span><span class="n">genotype</span><span class="p">,</span> <span class="n">dat</span><span class="p">)</span> <span class="ow">in</span> <span class="n">vol_dat</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pval</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.006007509501547491
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see significant difference among the three genotypes</p>
+<div class="section" id="testing-for-most-significantly-different-regions">
+<h3>Testing for most significantly different regions<a class="headerlink" href="#testing-for-most-significantly-different-regions" title="Permalink to this headline">¶</a></h3>
+<p>Since we detect difference in at least two of the genotypes using the whole brain volumes, we repeat the procedure on each of the regions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_pvals</span> <span class="o">=</span> <span class="p">{</span><span class="n">reg</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]}</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+    <span class="n">region_vols</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">genotype</span><span class="p">,</span> <span class="n">dat</span><span class="p">)</span> <span class="ow">in</span> <span class="n">vol_dat</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">region_vols</span><span class="p">)</span>
+
+    <span class="n">region_pvals</span><span class="p">[</span><span class="n">reg</span><span class="p">]</span> <span class="o">=</span> <span class="n">pval</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sorted_pvals</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">region_pvals</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sorted_pvals</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="s1">&#39;P-value&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Region</th>
+      <th>P-value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ml.1</td>
+      <td>0.000590</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>DTT</td>
+      <td>0.000763</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>PnC</td>
+      <td>0.001241</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cb_1_10.1</td>
+      <td>0.001744</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>PnRt</td>
+      <td>0.002679</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Vll.1</td>
+      <td>0.003626</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>ml</td>
+      <td>0.004092</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>DTT.1</td>
+      <td>0.004172</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>SC.1</td>
+      <td>0.004264</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>ParB</td>
+      <td>0.005457</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-for-differences-in-the-brain-volume-covariance">
+<h2>Testing for differences in the brain volume covariance<a class="headerlink" href="#testing-for-differences-in-the-brain-volume-covariance" title="Permalink to this headline">¶</a></h2>
+<p>Using similar procedure as above, we test whether the covariances are different among the genotypes. Prior to the 3-sample test, we use Omnibus embedding on the covariance matrices to obtain latent positions, which we then test for difference in distributions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omni</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">OmnibusEmbed</span><span class="p">()</span>
+
+<span class="n">omni</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="n">dat</span> <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">dat</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cor_dat</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+
+<span class="n">Xhats</span> <span class="o">=</span> <span class="n">omni</span><span class="o">.</span><span class="n">latent_left_</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Xhats</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3, 332, 4)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">Xhats</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pval</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.254124554923335e-26
+</pre></div>
+</div>
+</div>
+</div>
+<p>We again see a significant difference in distributions</p>
+</div>
+<div class="section" id="testing-for-differences-in-pairwise-covariances">
+<h2>Testing for differences in pairwise covariances<a class="headerlink" href="#testing-for-differences-in-pairwise-covariances" title="Permalink to this headline">¶</a></h2>
+<p>We then test for whether the distribution of each pair of genotypes are different.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genotypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;APOE22&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE33&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE44&#39;</span><span class="p">]</span>
+
+<span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
+
+
+<span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">genotypes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">genotypes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="n">h</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">Xhats</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Xhats</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">pval</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Genotype 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype 2&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;Genotype 1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;Genotype 1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+<span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;Genotype 2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;Genotype 2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+<span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;log(pvalue)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pairwise_df</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Genotype 1</th>
+      <th>Genotype 2</th>
+      <th>pvalue</th>
+      <th>log(pvalue)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>APOE22</td>
+      <td>APOE22</td>
+      <td>1.000000e+00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>APOE22</td>
+      <td>APOE33</td>
+      <td>9.932969e-21</td>
+      <td>-46.058427</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>APOE22</td>
+      <td>APOE44</td>
+      <td>1.014474e-17</td>
+      <td>-39.129576</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>APOE33</td>
+      <td>APOE22</td>
+      <td>9.932969e-21</td>
+      <td>-46.058427</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>APOE33</td>
+      <td>APOE33</td>
+      <td>1.000000e+00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>APOE33</td>
+      <td>APOE44</td>
+      <td>3.573940e-16</td>
+      <td>-35.567693</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>APOE44</td>
+      <td>APOE22</td>
+      <td>1.014474e-17</td>
+      <td>-39.129576</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>APOE44</td>
+      <td>APOE33</td>
+      <td>3.573940e-16</td>
+      <td>-35.567693</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>APOE44</td>
+      <td>APOE44</td>
+      <td>1.000000e+00</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="p">(</span><span class="n">p9</span><span class="o">.</span><span class="n">ggplot</span><span class="p">(</span><span class="n">p9</span><span class="o">.</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Genotype 1&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Genotype 2&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;log(pvalue)&quot;</span><span class="p">))</span> <span class="o">+</span>
+  <span class="n">p9</span><span class="o">.</span><span class="n">geom_tile</span><span class="p">(</span><span class="n">pairwise_df</span><span class="p">))</span>
+
+<span class="n">plot</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2022-01-28-volume-analysis_19_0.png" src="_images/2022-01-28-volume-analysis_19_0.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ggplot: (8766045953917)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="coverpage.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Mouse Brain and Alzheimer’s Disease</p>
+        </div>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Jaewon Chung, Eric B. Bridgeford<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
