@@ -7,3 +7,4 @@ parts:
   - caption: Brain Volume Covariances
     chapters:
       - file: 2022-01-28-volume-analysis
+      - file: 2022-02-02-multigraph-clustering
