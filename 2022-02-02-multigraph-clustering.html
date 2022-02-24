@@ -46,18 +46,18 @@
     <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hierarchical Clustering Analysis Part 2" href="2022-02-18-multigraph-clustering-mase.html" />
     <link rel="prev" title="Brain Volume Analysis" href="2022-01-28-volume-analysis.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -116,6 +116,11 @@
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Hierarchical Clustering Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-02-18-multigraph-clustering-mase.html">
+   Hierarchical Clustering Analysis Part 2
   </a>
  </li>
 </ul>
@@ -1192,7 +1197,7 @@ H_A:&amp; \qquad F_i \neq F_j
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">cluster_label_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">out</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./out.csv&quot;</span><span class="p">)</span>
+<span class="n">out</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/omni_clustering.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1232,6 +1237,13 @@ H_A:&amp; \qquad F_i \neq F_j
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title">Brain Volume Analysis</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="2022-02-18-multigraph-clustering-mase.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hierarchical Clustering Analysis Part 2</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             
