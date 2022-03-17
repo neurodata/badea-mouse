@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hierarchical Clustering Analysis Part 2 &#8212; Mouse Connectomes</title>
+    <title>Hierarchical Clustering Analysis - MASE &#8212; Mouse Connectomes</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,11 +54,11 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Hierarchical Clustering Analysis" href="2022-02-02-multigraph-clustering.html" />
+    <link rel="next" title="Test whether brain volume and FA are independent" href="2022-03-15-multimodal-clustering.html" />
+    <link rel="prev" title="Hierarchical Clustering Analysis - Omnibus Embedding" href="2022-02-02-multigraph-clustering.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -115,12 +115,17 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="2022-02-02-multigraph-clustering.html">
-   Hierarchical Clustering Analysis
+   Hierarchical Clustering Analysis - Omnibus Embedding
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Hierarchical Clustering Analysis Part 2
+   Hierarchical Clustering Analysis - MASE
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-03-15-multimodal-clustering.html">
+   Test whether brain volume and FA are independent
   </a>
  </li>
 </ul>
@@ -274,7 +279,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Hierarchical Clustering Analysis Part 2</h1>
+                <h1>Hierarchical Clustering Analysis - MASE</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -330,9 +335,9 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="hierarchical-clustering-analysis-part-2">
-<h1>Hierarchical Clustering Analysis Part 2<a class="headerlink" href="#hierarchical-clustering-analysis-part-2" title="Permalink to this headline">¶</a></h1>
-<p>We will use multiple adjacency spectral embedding (MASE) instead of omnibus embedding</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="hierarchical-clustering-analysis-mase">
+<h1>Hierarchical Clustering Analysis - MASE<a class="headerlink" href="#hierarchical-clustering-analysis-mase" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook, we will use multiple adjacency spectral embedding (MASE) instead of omnibus embedding to obtain a low dimensional vector representation of vertices in our correlation matrices</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -439,8 +444,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="embed-the-data-simultaneously-using-multiple-adjacency-spectral-embedding-mase">
 <h2>Embed the data simultaneously using Multiple Adjacency Spectral Embedding (MASE)<a class="headerlink" href="#embed-the-data-simultaneously-using-multiple-adjacency-spectral-embedding-mase" title="Permalink to this headline">¶</a></h2>
-<p>The purpose of MASE is to obtain a low dimensional representation of the three correlation matrices such that the embedded correlation matrices can be compared to each other in a meaningful way. Unlike omnibus embedding, MASE provides a common vertex representation across all correlation matrices. One can view this as a factoring out of common structures. The embedding provides a low dimensional vector per region of the brain, resulting in a <span class="math notranslate nohighlight">\(322\times d\)</span> matrix per genotype where <span class="math notranslate nohighlight">\(d\)</span> is the “embedding dimension” and <span class="math notranslate nohighlight">\(d &lt;&lt; 332\)</span>.</p>
-<p>We will use the embeddings in order to perform hierchical clustering.</p>
+<p>The purpose of MASE is to obtain a low dimensional representation of the three correlation matrices such that the embedded correlation matrices can be compared to each other in a meaningful way <span id="id1">[<a class="reference internal" href="#id4" title="JesÃºs Arroyo, Avanti Athreya, Joshua Cape, Guodong Chen, Carey E. Priebe, and Joshua T. Vogelstein. Inference for multiple heterogeneous networks with a common invariant subspace. Journal of Machine Learning Research, 22(142):1-49, 2021. URL: http://jmlr.org/papers/v22/19-558.html.">Arroyo <em>et al.</em>, 2021</a>]</span>. Unlike omnibus embedding, MASE provides a common vertex representation across all correlation matrices. One can view this as a factoring out of common structures that are shared across all correlation matrices. This common representation of vertices provide a low dimensional vector per region of the brain, resulting in a <span class="math notranslate nohighlight">\(322\times d\)</span> matrix per genotype where <span class="math notranslate nohighlight">\(d\)</span> is the “embedding dimension” and <span class="math notranslate nohighlight">\(d &lt;&lt; 332\)</span>.</p>
+<p>We will use the embeddings in order to perform hierchical clustering <span id="id2">[<a class="reference internal" href="#id11" title="Thomas L Athey, Tingshan Liu, Benjamin D Pedigo, and Joshua T Vogelstein. Autogmm: automatic and hierarchical gaussian mixture modeling in python. arXiv preprint arXiv:1909.02688, 2019.">Athey <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id10" title="Vince Lyzinski, Daniel L Sussman, Minh Tang, Avanti Athreya, and Carey E Priebe. Perfect clustering for stochastic blockmodel graphs via adjacency spectral embedding. Electronic journal of statistics, 8(2):2905–2922, 2014.">Lyzinski <em>et al.</em>, 2014</a>, <a class="reference internal" href="#id9" title="Carey E Priebe, Youngser Park, Joshua T Vogelstein, John M Conroy, Vince Lyzinski, Minh Tang, Avanti Athreya, Joshua Cape, and Eric Bridgeford. On a two-truths phenomenon in spectral graph clustering. Proceedings of the National Academy of Sciences, 116(13):5995–6000, 2019.">Priebe <em>et al.</em>, 2019</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mase</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">MultipleASE</span><span class="p">()</span>
@@ -1060,6 +1065,21 @@ H_A:&amp; \qquad F_i \neq F_j
 </div>
 </div>
 </div>
+<p id="id3"><dl class="citation">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">AAC+21</a></span></dt>
+<dd><p>JesÃºs Arroyo, Avanti Athreya, Joshua Cape, Guodong Chen, Carey E. Priebe, and Joshua T. Vogelstein. Inference for multiple heterogeneous networks with a common invariant subspace. <em>Journal of Machine Learning Research</em>, 22(142):1–49, 2021. URL: <a class="reference external" href="http://jmlr.org/papers/v22/19-558.html">http://jmlr.org/papers/v22/19-558.html</a>.</p>
+</dd>
+<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id2">ALPV19</a></span></dt>
+<dd><p>Thomas L Athey, Tingshan Liu, Benjamin D Pedigo, and Joshua T Vogelstein. Autogmm: automatic and hierarchical gaussian mixture modeling in python. <em>arXiv preprint arXiv:1909.02688</em>, 2019.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id2">LST+14</a></span></dt>
+<dd><p>Vince Lyzinski, Daniel L Sussman, Minh Tang, Avanti Athreya, and Carey E Priebe. Perfect clustering for stochastic blockmodel graphs via adjacency spectral embedding. <em>Electronic journal of statistics</em>, 8(2):2905–2922, 2014.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id2">PPV+19</a></span></dt>
+<dd><p>Carey E Priebe, Youngser Park, Joshua T Vogelstein, John M Conroy, Vince Lyzinski, Minh Tang, Avanti Athreya, Joshua Cape, and Eric Bridgeford. On a two-truths phenomenon in spectral graph clustering. <em>Proceedings of the National Academy of Sciences</em>, 116(13):5995–6000, 2019.</p>
+</dd>
+</dl>
+</p>
 </div>
 </div>
 </div>
@@ -1093,8 +1113,15 @@ H_A:&amp; \qquad F_i \neq F_j
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Hierarchical Clustering Analysis</p>
+            <p class="prev-next-title">Hierarchical Clustering Analysis - Omnibus Embedding</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="2022-03-15-multimodal-clustering.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Test whether brain volume and FA are independent</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             

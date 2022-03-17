@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hierarchical Clustering Analysis &#8212; Mouse Connectomes</title>
+    <title>Hierarchical Clustering Analysis - Omnibus Embedding &#8212; Mouse Connectomes</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,11 +54,10 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Hierarchical Clustering Analysis Part 2" href="2022-02-18-multigraph-clustering-mase.html" />
+    <link rel="next" title="Hierarchical Clustering Analysis - MASE" href="2022-02-18-multigraph-clustering-mase.html" />
     <link rel="prev" title="Brain Volume Analysis" href="2022-01-28-volume-analysis.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -116,12 +115,17 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Hierarchical Clustering Analysis
+   Hierarchical Clustering Analysis - Omnibus Embedding
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="2022-02-18-multigraph-clustering-mase.html">
-   Hierarchical Clustering Analysis Part 2
+   Hierarchical Clustering Analysis - MASE
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-03-15-multimodal-clustering.html">
+   Test whether brain volume and FA are independent
   </a>
  </li>
 </ul>
@@ -275,7 +279,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Hierarchical Clustering Analysis</h1>
+                <h1>Hierarchical Clustering Analysis - Omnibus Embedding</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -331,8 +335,8 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="hierarchical-clustering-analysis">
-<h1>Hierarchical Clustering Analysis<a class="headerlink" href="#hierarchical-clustering-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="hierarchical-clustering-analysis-omnibus-embedding">
+<h1>Hierarchical Clustering Analysis - Omnibus Embedding<a class="headerlink" href="#hierarchical-clustering-analysis-omnibus-embedding" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -433,8 +437,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="embed-the-data-simultaneously-using-omnibus-embedding">
 <h2>Embed the data simultaneously using Omnibus embedding<a class="headerlink" href="#embed-the-data-simultaneously-using-omnibus-embedding" title="Permalink to this headline">¶</a></h2>
-<p>The purpose of omnibus embedding is to obtain a low dimensional representation of the three correlation matrices such that the embedded correlation matrices can be compared to each other in a meaningful way. The embedding provides a low dimensional vector per region of the brain, resulting in a <span class="math notranslate nohighlight">\(322\times d\)</span> matrix per genotype where <span class="math notranslate nohighlight">\(d\)</span> is the “embedding dimension” and <span class="math notranslate nohighlight">\(d &lt;&lt; 332\)</span>. The resulting vectors per region is called a latent positions of a vertex. Omnibus embedding is similar to the idea of using PCA on data to get dataset with reduced number of features.</p>
-<p>We will use the embeddings in order to perform hierchical clustering.</p>
+<p>The purpose of omnibus embedding is to obtain a low dimensional representation of the three correlation matrices such that the embedded correlation matrices can be compared to each other in a meaningful way <span id="id1">[<a class="reference internal" href="#id6" title="Avanti Athreya, Donniell E Fishkind, Minh Tang, Carey E Priebe, Youngser Park, Joshua T Vogelstein, Keith Levin, Vince Lyzinski, Yichen Qin, and Daniel L Sussman. Statistical inference on random dot product graphs: a survey. Journal of machine learning research: JMLR, 18(226):1–92, 2018. URL: http://jmlr.org/papers/v18/17-448.html.">Athreya <em>et al.</em>, 2018</a>, <a class="reference internal" href="#id9" title="Vince Lyzinski, Daniel L. Sussman, Minh Tang, Avanti Athreya, and Carey E. Priebe. Perfect clustering for stochastic blockmodel graphs via adjacency spectral embedding. Electronic Journal of Statistics, 8(2):2905–2922, 2014. URL: https://doi.org/10.1214/14-EJS978, doi:10.1214/14-EJS978.">Lyzinski <em>et al.</em>, 2014</a>, <a class="reference internal" href="#id7" title="Daniel L. Sussman, Minh Tang, Donniell E. Fishkind, and Carey E. Priebe. A consistent adjacency spectral embedding for stochastic blockmodel graphs. Journal of the American Statistical Association, 107(499):1119-1128, 2012. URL: https://doi.org/10.1080/01621459.2012.699795, arXiv:https://doi.org/10.1080/01621459.2012.699795, doi:10.1080/01621459.2012.699795.">Sussman <em>et al.</em>, 2012</a>, <a class="reference internal" href="#id8" title="Daniel L. Sussman, Minh Tang, and Carey E. Priebe. Consistent latent position estimation and vertex classification for random dot product graphs. IEEE Transactions on Pattern Analysis and Machine Intelligence, 36:48-57, 2014. doi:10.1109/TPAMI.2013.135.">Sussman <em>et al.</em>, 2014</a>]</span>. The embedding provides a low dimensional vector per region of the brain for each correlation matrix, resulting in a <span class="math notranslate nohighlight">\(322\times d\)</span> matrix per genotype where <span class="math notranslate nohighlight">\(d\)</span> is the “embedding dimension” and <span class="math notranslate nohighlight">\(d &lt;&lt; 332\)</span>. The resulting vectors per region is called a latent positions of a vertex. Omnibus embedding is similar to the idea of using PCA on data to get dataset with reduced number of features.</p>
+<p>We will use the embeddings in order to perform hierchical clustering <span id="id2">[<a class="reference internal" href="2022-02-18-multigraph-clustering-mase.html#id11" title="Thomas L Athey, Tingshan Liu, Benjamin D Pedigo, and Joshua T Vogelstein. Autogmm: automatic and hierarchical gaussian mixture modeling in python. arXiv preprint arXiv:1909.02688, 2019.">Athey <em>et al.</em>, 2019</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omni</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">OmnibusEmbed</span><span class="p">()</span>
@@ -454,7 +458,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="perform-hierarchical-clustering">
 <h2>Perform hierarchical clustering<a class="headerlink" href="#perform-hierarchical-clustering" title="Permalink to this headline">¶</a></h2>
-<p>First we concatenate the embeddings resulting in a matrix with size <span class="math notranslate nohighlight">\(332 \times 3d\)</span>. We will iteratively divide the regions into two clusters. For example, we divide the <span class="math notranslate nohighlight">\(332\)</span> regions into two clusters, and each resulting cluster will be divided into two more clusters, etc. The clustering algorithm used at each division is Gaussian mixture modeling.</p>
+<p>First we concatenate the embeddings resulting in a matrix with size <span class="math notranslate nohighlight">\(332 \times 3d\)</span>. We will iteratively divide the regions into two clusters. For example, we divide the <span class="math notranslate nohighlight">\(332\)</span> regions into two clusters, and each resulting cluster will be divided into two more clusters, etc. The clustering algorithm used at each division is Gaussian mixture modeling <span id="id3">[<a class="reference internal" href="2022-02-18-multigraph-clustering-mase.html#id11" title="Thomas L Athey, Tingshan Liu, Benjamin D Pedigo, and Joshua T Vogelstein. Autogmm: automatic and hierarchical gaussian mixture modeling in python. arXiv preprint arXiv:1909.02688, 2019.">Athey <em>et al.</em>, 2019</a>]</span>.</p>
 <p>The clustering algorithm will tell us which regions should be grouped together, and subsequently forms our “subgraphs” given by the clusterings.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1084,6 +1088,24 @@ H_A:&amp; \qquad F_i \neq F_j
 </div>
 </div>
 </div>
+<p id="id4"><dl class="citation">
+<dt class="label" id="id12"><span class="brackets">ALPV19</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p>Thomas L Athey, Tingshan Liu, Benjamin D Pedigo, and Joshua T Vogelstein. Autogmm: automatic and hierarchical gaussian mixture modeling in python. <em>arXiv preprint arXiv:1909.02688</em>, 2019.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">AFT+18</a></span></dt>
+<dd><p>Avanti Athreya, Donniell E Fishkind, Minh Tang, Carey E Priebe, Youngser Park, Joshua T Vogelstein, Keith Levin, Vince Lyzinski, Yichen Qin, and Daniel L Sussman. Statistical inference on random dot product graphs: a survey. <em>Journal of machine learning research: JMLR</em>, 18(226):1–92, 2018. URL: <a class="reference external" href="http://jmlr.org/papers/v18/17-448.html">http://jmlr.org/papers/v18/17-448.html</a>.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id1">LST+14</a></span></dt>
+<dd><p>Vince Lyzinski, Daniel L. Sussman, Minh Tang, Avanti Athreya, and Carey E. Priebe. Perfect clustering for stochastic blockmodel graphs via adjacency spectral embedding. <em>Electronic Journal of Statistics</em>, 8(2):2905–2922, 2014. URL: <a class="reference external" href="https://doi.org/10.1214/14-EJS978">https://doi.org/10.1214/14-EJS978</a>, <a class="reference external" href="https://doi.org/10.1214/14-EJS978">doi:10.1214/14-EJS978</a>.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id1">STFP12</a></span></dt>
+<dd><p>Daniel L. Sussman, Minh Tang, Donniell E. Fishkind, and Carey E. Priebe. A consistent adjacency spectral embedding for stochastic blockmodel graphs. <em>Journal of the American Statistical Association</em>, 107(499):1119–1128, 2012. URL: <a class="reference external" href="https://doi.org/10.1080/01621459.2012.699795">https://doi.org/10.1080/01621459.2012.699795</a>, <a class="reference external" href="https://arxiv.org/abs/https://doi.org/10.1080/01621459.2012.699795">arXiv:https://doi.org/10.1080/01621459.2012.699795</a>, <a class="reference external" href="https://doi.org/10.1080/01621459.2012.699795">doi:10.1080/01621459.2012.699795</a>.</p>
+</dd>
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id1">STP14</a></span></dt>
+<dd><p>Daniel L. Sussman, Minh Tang, and Carey E. Priebe. Consistent latent position estimation and vertex classification for random dot product graphs. <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, 36:48–57, 2014. <a class="reference external" href="https://doi.org/10.1109/TPAMI.2013.135">doi:10.1109/TPAMI.2013.135</a>.</p>
+</dd>
+</dl>
+</p>
 </div>
 </div>
 </div>
@@ -1123,7 +1145,7 @@ H_A:&amp; \qquad F_i \neq F_j
     <a class='right-next' id="next-link" href="2022-02-18-multigraph-clustering-mase.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Hierarchical Clustering Analysis Part 2</p>
+        <p class="prev-next-title">Hierarchical Clustering Analysis - MASE</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
