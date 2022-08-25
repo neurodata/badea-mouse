@@ -441,7 +441,7 @@ a_{ij}^{(y)} | z_i = k, z_j = l \overset{ind.}{\sim} F^{(y)}_{k,l}
 H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against }H^{(y)}<em>{A, k,l}: F^{(y)}</em>{k,l} = F^{(y’)}_{k,l}
 \end{align*}</p>
 <p>The interpretation of a <span class="math notranslate nohighlight">\(p\)</span>-value less than the cutoff threshold <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> (after Bonferroni-Holm adjustment) for a given pair of classes <span class="math notranslate nohighlight">\((y, y')\)</span> at a given community pair <span class="math notranslate nohighlight">\((k, l)\)</span> is that the data does not support the null hypothesis, that the community pairing shares an equal distribution between the indicated pair of classes. A sufficient test for this context (univariate data, assumed to be independent, paired) is the Wilcoxon Signed-Rank Test, which can be performed using <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
-<p>The outcomes can be visualized as pairs of heatmaps between a given pair of classes. Further, since the edges are undirected, we can ignore the off-diagonals of the matrix.</p>
+<p>The outcomes (p-values) can be visualized as pairs of heatmaps between a given pair of classes. Further, since the edges are undirected, we can ignore the off-diagonals of the matrix. These outcomes are then ranked, where a large rank indicates the smaller p-values.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">wilcoxon</span>
@@ -472,6 +472,7 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
 
 <span class="n">pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(Vol)&quot;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(FA)&quot;</span><span class="p">])))</span>
 <span class="n">pvals_adjusted</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;holm&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -480,6 +481,8 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(Vol)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvals_adjusted</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">len_pvals</span><span class="p">]</span>
 <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(FA)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvals_adjusted</span><span class="p">[</span><span class="n">len_pvals</span><span class="p">:(</span><span class="mi">2</span><span class="o">*</span><span class="n">len_pvals</span><span class="p">)]</span>
 
+<span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;rank(Vol)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="o">-</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(Vol)&quot;</span><span class="p">])</span>
+<span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;rank(FA)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="o">-</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(FA)&quot;</span><span class="p">])</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">.05</span>
 <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Test Outcome(Vol)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(Vol)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">alpha</span>
 <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Test Outcome(FA)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;p-value(FA)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">alpha</span>
@@ -487,7 +490,7 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pairing</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Pairing&quot;</span><span class="p">])):</span>
@@ -502,6 +505,23 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/2022-08-20-label-cmp_6_0.png" src="_images/2022-08-20-label-cmp_6_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pairing</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Pairing&quot;</span><span class="p">])):</span>
+    <span class="n">df_X</span> <span class="o">=</span> <span class="n">res_dat</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Pairing&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">pairing</span><span class="p">]</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s2">&quot;Community l&quot;</span><span class="p">,</span> <span class="s2">&quot;Community k&quot;</span><span class="p">,</span> <span class="s2">&quot;rank(Vol)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df_X</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmaps</span><span class="p">[</span><span class="s2">&quot;sequential&quot;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:s}</span><span class="s2"> Vol&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pairing</span><span class="p">))</span>
+    <span class="n">df_X</span> <span class="o">=</span> <span class="n">res_dat</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">res_dat</span><span class="p">[</span><span class="s2">&quot;Pairing&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">pairing</span><span class="p">]</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s2">&quot;Community l&quot;</span><span class="p">,</span> <span class="s2">&quot;Community k&quot;</span><span class="p">,</span> <span class="s2">&quot;rank(FA)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df_X</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmaps</span><span class="p">[</span><span class="s2">&quot;sequential&quot;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:s}</span><span class="s2"> FA&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pairing</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2022-08-20-label-cmp_7_0.png" src="_images/2022-08-20-label-cmp_7_0.png" />
 </div>
 </div>
 </section>
