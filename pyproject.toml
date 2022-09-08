@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "badea-mouse"
+version = "0.1.0"
+description = ""
+authors = ["j1c <jaewonc78@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+seaborn = "^0.12.0"
+graspologic = { git = "https://github.com/microsoft/graspologic.git", branch = "dev"}
+jupyterlab = "^3.4.6"
+pkg = {path = "pkg", develop = true}
+
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0a5"]
+build-backend = "poetry.core.masonry.api"
