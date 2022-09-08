@@ -1443,6 +1443,14 @@ python-versions = ">=3.7"
 test = ["pre-commit", "pytest"]
 
 [[package]]
+name = "typing-extensions"
+version = "4.3.0"
+description = "Backported and Experimental Type Hints for Python 3.7+"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "umap-learn"
 version = "0.5.3"
 description = "Uniform Manifold Approximation and Projection"
@@ -1519,7 +1527,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "0d77a3b638482c7139304925496f38d9ac9ad9b144369cadf99b5a2391b33e6c"
+content-hash = "3993846e930dd5f83466ce79fbe545a63a73a201249022801484c68082f9c3d3"
 
 [metadata.files]
 anyio = []
@@ -1642,6 +1650,7 @@ tomli = []
 tornado = []
 tqdm = []
 traitlets = []
+typing-extensions = []
 umap-learn = []
 urllib3 = []
 wcwidth = [
