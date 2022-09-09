@@ -8,6 +8,10 @@ from graspologic.utils import symmetrize
 
 DATA_DIR = Path(Path(__file__).absolute().parents[3]) / "data"
 
+GENOTYPES = ["APOE22", "APOE33", "APOE44"]
+HEMISPHERES = ["Left", "Right"]
+SUPER_STRUCTURES = ["FB", "MB", "HB", "WM", "VS"]
+
 
 def _check_data():
     """_summary_
@@ -23,9 +27,8 @@ def _check_data():
         raise ValueError(msg)
 
     key = pd.read_csv(DATA_DIR / "processed/key.csv")
-    genotypes = ["APOE22", "APOE33", "APOE44"]
 
-    mask = key["Genotype"].isin(genotypes)  # for filtering out invalid genotypes
+    mask = key["Genotype"].isin(GENOTYPES)  # for filtering out invalid genotypes
     key = key.loc[mask]
 
     labels = key["Genotype"].to_numpy()
@@ -33,17 +36,32 @@ def _check_data():
     return labels, mask
 
 
-def load_vertex_labels():
+def load_vertex_metadata():
     """_summary_
 
     Returns:
-        _type_: _description_
+        labels : tuple.
+            Elements are (region names, region hemispheres, region super structures)
     """
+    df = pd.read_csv(DATA_DIR / "processed/node_label_dictionary.csv")
 
-    df = pd.read_csv(DATA_DIR / "processed/mouses-volumes.csv")
-    labels = df.columns.to_list()
+    region_names = df.Abbreviation.to_numpy()
+    region_hemispheres = df.Hemisphere.to_numpy()
+    region_super_structures = df.Level_1
 
-    return labels
+    # Relabel Level_1 column
+    to_replace = dict(
+        [
+            ("1_forebrain", "FB"),
+            ("2_midbrain", "MB"),
+            ("3_hindbrain", "HB"),
+            ("4_white_matter_tracts", "WM"),
+            ("5_ventricular_system", "VS"),
+        ]
+    )
+    region_super_structures = region_super_structures.replace(to_replace).to_numpy()
+
+    return (region_names, region_hemispheres, region_super_structures)
 
 
 def load_volume():
@@ -73,15 +91,14 @@ def load_volume_corr():
 
     correlations = []
 
-    genotypes = ["APOE22", "APOE33", "APOE44"]
-    for genotype in genotypes:
+    for genotype in GENOTYPES:
         subset = data[labels == genotype]
         corr_arr = symmetrize(np.corrcoef(subset, rowvar=False))
         correlations.append(corr_arr)
 
     correlations = np.array(correlations)
 
-    return correlations, genotypes
+    return correlations, GENOTYPES
 
 
 def load_fa():
@@ -110,12 +127,11 @@ def load_fa_corr():
 
     correlations = []
 
-    genotypes = ["APOE22", "APOE33", "APOE44"]
-    for genotype in genotypes:
+    for genotype in GENOTYPES:
         subset = data[labels == genotype]
         corr_arr = symmetrize(np.corrcoef(subset, rowvar=False))
         correlations.append(corr_arr)
 
     correlations = np.array(correlations)
 
-    return correlations, genotypes
+    return correlations, GENOTYPES
