@@ -1,7 +1,0 @@
-# grab graspologic + code directly from source
-# must be public repo
-git+https://github.com/loftusa/graspologic.git@dev
-
-# Book related
-jupyter-book
-ghp-import
