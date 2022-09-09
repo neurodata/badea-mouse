@@ -12,10 +12,14 @@ seaborn = "^0.12.0"
 graspologic = { git = "https://github.com/microsoft/graspologic.git", branch = "dev"}
 jupyterlab = "^3.4.6"
 pkg = {path = "pkg", develop = true}
-black = "^22.8.0"
+statsmodels = "^0.13.2"
 
 
 [tool.poetry.dev-dependencies]
+black = "^22.8.0"
+jupyter-book = "^0.13.1"
+jupyterlab-code-formatter = "^1.5.3"
+isort = "^5.10"
 
 [build-system]
 requires = ["poetry-core>=1.0.0a5"]

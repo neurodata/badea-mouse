@@ -33,6 +33,19 @@ def _check_data():
     return labels, mask
 
 
+def load_vertex_labels():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+
+    df = pd.read_csv(DATA_DIR / "processed/mouses-volumes.csv")
+    labels = df.columns.to_list()
+
+    return labels
+
+
 def load_volume():
     """Loads brain volumes from the 29 mice. There are total of 11 APOE2, 8 APOE3, and 10 APOE4 mice.
 
