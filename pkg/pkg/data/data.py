@@ -10,17 +10,27 @@ DATA_DIR = Path(Path(__file__).absolute().parents[3]) / "data"
 
 
 def _check_data():
+    """_summary_
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
     if not DATA_DIR.exists():
         msg = "Where is the data?"
         raise ValueError(msg)
 
-    key = pd.read_csv(DATA_DIR / "/processed/key.csv")
+    key = pd.read_csv(DATA_DIR / "processed/key.csv")
     genotypes = ["APOE22", "APOE33", "APOE44"]
 
     mask = key["Genotype"].isin(genotypes)  # for filtering out invalid genotypes
     key = key.loc[mask]
 
-    return key, mask
+    labels = key["Genotype"].to_numpy()
+
+    return labels, mask
 
 
 def load_volume():
@@ -30,17 +40,17 @@ def load_volume():
         out: 2d array
         labels: 1d array
     """
-    key, mask = _check_data()
+    labels, mask = _check_data()
 
-    volumes = pd.read_csv(DATA_DIR / "/processed/mouses-volumes.csv")
+    volumes = pd.read_csv(DATA_DIR / "processed/mouses-volumes.csv")
     volumes = volumes[mask]
 
     out = volumes.to_numpy()
 
-    return out, key["Genotype"]
+    return out, labels
 
 
-def load_volume_correlation():
+def load_volume_corr():
     """Loads the correlation matrices per genotype
 
     Returns:
@@ -50,11 +60,15 @@ def load_volume_correlation():
 
     correlations = []
 
-    genotypes = np.unique(labels)
+    genotypes = ["APOE22", "APOE33", "APOE44"]
     for genotype in genotypes:
-        pass
+        subset = data[labels == genotype]
+        corr_arr = symmetrize(np.corrcoef(subset, rowvar=False))
+        correlations.append(corr_arr)
 
-    return 1
+    correlations = np.array(correlations)
+
+    return correlations, genotypes
 
 
 def load_fa():
@@ -63,15 +77,32 @@ def load_fa():
     Returns:
         _type_: _description_
     """
-    key, mask = _check_data()
+    labels, mask = _check_data()
 
-    return 1
+    volumes = pd.read_csv(DATA_DIR / "processed/mouses-fa.csv")
+    volumes = volumes[mask]
+
+    out = volumes.to_numpy()
+
+    return out, labels
 
 
-def load_fa_correlation():
+def load_fa_corr():
     """_summary_
 
     Returns:
         _type_: _description_
     """
-    return 1
+    data, labels = load_fa()
+
+    correlations = []
+
+    genotypes = ["APOE22", "APOE33", "APOE44"]
+    for genotype in genotypes:
+        subset = data[labels == genotype]
+        corr_arr = symmetrize(np.corrcoef(subset, rowvar=False))
+        correlations.append(corr_arr)
+
+    correlations = np.array(correlations)
+
+    return correlations, genotypes

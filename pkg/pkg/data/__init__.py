@@ -1,1 +1,1 @@
-from .data import load_fa, load_fa_correlation, load_volume, load_volume_correlation
+from .data import load_fa, load_fa_corr, load_volume, load_volume_corr
