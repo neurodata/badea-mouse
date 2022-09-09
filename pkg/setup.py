@@ -6,7 +6,7 @@ setup(
     name="pkg",
     packages=find_packages(),
     version="0.1.0",
-    description="Local package for heritability paper",
+    description="Local package for mouse paper",
     author="Neurodata",
     license="MIT",
     install_requires=REQUIRED_PACKAGES,
