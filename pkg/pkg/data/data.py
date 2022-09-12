@@ -9,8 +9,20 @@ from graspologic.utils import symmetrize
 DATA_DIR = Path(Path(__file__).absolute().parents[3]) / "data"
 
 GENOTYPES = ["APOE22", "APOE33", "APOE44"]
-HEMISPHERES = ["Left", "Right"]
-SUPER_STRUCTURES = ["FB", "MB", "HB", "WM", "VS"]
+HEMISPHERES = ["L", "R"]
+SUPER_STRUCTURES = ["FB", "HB", "MB", "VS", "WM"]
+HEMISPHERE_STRUCTURES = [
+    "LFB",
+    "LHB",
+    "LMB",
+    "LVS",
+    "LWM",
+    "RFB",
+    "RHB",
+    "RMB",
+    "RVS",
+    "RWM",
+]
 
 
 def _check_data():
@@ -37,20 +49,33 @@ def _check_data():
 
 
 def load_vertex_metadata():
-    """_summary_
 
-    Returns:
-        labels : tuple.
-            Elements are (region names, region hemispheres, region super structures)
+    """Loads vertex wise labels
+
+    Returns
+    -------
+    labels : tuple
+        Elements are (region names, region hemispheres, region super structures,
+        region hemisphere + super structures)
     """
     df = pd.read_csv(DATA_DIR / "processed/node_label_dictionary.csv")
 
+    # Region names
     region_names = df.Abbreviation.to_numpy()
-    region_hemispheres = df.Hemisphere.to_numpy()
-    region_super_structures = df.Level_1
 
-    # Relabel Level_1 column
-    to_replace = dict(
+    # Region hemispheres
+    region_hemispheres = df.Hemisphere
+    to_replace = dict(  # Shorten hemisphere labels
+        [
+            ("Left", "L"),
+            ("Right", "R"),
+        ]
+    )
+    region_hemispheres = region_hemispheres.replace(to_replace).to_numpy()
+
+    # Region structures
+    region_super_structures = df.Level_1
+    to_replace = dict(  # Relabel Level_1 column
         [
             ("1_forebrain", "FB"),
             ("2_midbrain", "MB"),
@@ -61,7 +86,17 @@ def load_vertex_metadata():
     )
     region_super_structures = region_super_structures.replace(to_replace).to_numpy()
 
-    return (region_names, region_hemispheres, region_super_structures)
+    # Region hemispheres + structures
+    region_hemisphere_structures = np.array(
+        [i + j for i, j in zip(region_hemispheres, region_super_structures)]
+    )
+
+    return (
+        region_names,
+        region_hemispheres,
+        region_super_structures,
+        region_hemisphere_structures,
+    )
 
 
 def load_volume():
