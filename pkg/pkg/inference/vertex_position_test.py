@@ -45,7 +45,12 @@ def vertex_position_test(
     )
     null_distribution_2 = np.hstack(null_distribution_2)
 
-    return stat, null_distribution_1, null_distribution_2
+    p_value_1 = (null_distribution_1 >= stat).sum(axis=1) / (n_bootstraps + 1)
+    p_value_2 = (null_distribution_2 >= stat).sum(axis=1) / (n_bootstraps + 1)
+
+    p_value = np.max([p_value_1, p_value_2], axis=0)
+
+    return stat, p_value, null_distribution_1, null_distribution_2
 
 
 def _difference_norm(
