@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>&lt;no title&gt; &#8212; Mouse Connectomes</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/nd_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Mouse Connectomes</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="coverpage.html">
+                    Mouse Brain and Alzheimer’s Disease
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Brain Volume Covariances
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-01-28-volume-analysis.html">
+   Brain Volume Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-02-02-multigraph-clustering.html">
+   Hierarchical Clustering Analysis - Omnibus Embedding
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-02-18-multigraph-clustering-mase.html">
+   Hierarchical Clustering Analysis - MASE
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-03-15-multimodal-clustering.html">
+   Test whether brain volume and FA are independent
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2022-08-20-label-cmp.html">
+   Comparing Subgroups of Edges
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/neurodata/badea-mouse/main?urlpath=tree/badea-mouse/2022-09-14-vertex-two-sample.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neurodata/badea-mouse"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neurodata/badea-mouse/issues/new?title=Issue%20on%20page%20%2F2022-09-14-vertex-two-sample.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/2022-09-14-vertex-two-sample.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1><no title></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">OmnibusEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+<span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">p_from_latent</span><span class="p">,</span> <span class="n">sample_edges</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pkg.inference.vertex_position_test</span> <span class="kn">import</span> <span class="n">vertex_position_test</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_delta</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="p">((</span><span class="n">p</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span>
+
+    <span class="k">return</span> <span class="n">delta</span>
+
+<span class="k">def</span> <span class="nf">sample_latent</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">compute_delta</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">delta_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">delta_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span>
+
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ps</span> <span class="o">+</span> <span class="n">delta_vec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span>
+
+
+<span class="k">def</span> <span class="nf">sample_graphs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">sample_latent</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">P_X</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">p_from_latent</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">P_Y</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">p_from_latent</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">sample_edges</span><span class="p">(</span><span class="n">P_X</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">sample_edges</span><span class="p">(</span><span class="n">P_Y</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">25</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">P_X</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">p_from_latent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">sample_edges</span><span class="p">(</span><span class="n">P_X</span><span class="p">)</span>
+
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">P_Y</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">p_from_latent</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">B</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">sample_edges</span><span class="p">(</span><span class="n">P_Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="p">,</span> <span class="n">null1</span><span class="p">,</span> <span class="n">null2</span> <span class="o">=</span> <span class="n">vertex_position_test</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">stats</span> <span class="o">&lt;=</span> <span class="n">null1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0. , 0. , 0.3, 0.1, 0.1, 0. , 0.9, 0. , 0.3, 0.7, 0.1, 0.1, 0. ,
+       0.1, 0.3, 0. , 0.2, 0.1, 0.2, 0.3, 0. , 0. , 1. , 0.1, 0.8])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">stats</span> <span class="o">&lt;=</span> <span class="n">null2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0. , 0.1, 0.5, 0.3, 0.2, 0.1, 1. , 0.1, 0.6, 0.7, 0. , 0.3, 0.1,
+       0.2, 0.2, 0. , 0.2, 0.3, 0.3, 0.6, 0.1, 0.4, 0.9, 0.2, 1. ])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([[1.08592646],
+        [1.23819776],
+        [0.50268083],
+        [0.68186108],
+        [0.75424057],
+        [0.70981027],
+        [0.10757134],
+        [1.44302925],
+        [0.63841905],
+        [0.43701447],
+        [0.71786214],
+        [0.53037363],
+        [1.24223781],
+        [0.49581513],
+        [0.78747452],
+        [0.69774538],
+        [0.78207827],
+        [1.13014465],
+        [0.42221045],
+        [0.32720892],
+        [0.48952811],
+        [0.71228932],
+        [0.10285327],
+        [0.55188964],
+        [0.66793746]]),
+ array([[0.2528289 , 0.49870691, 0.32718582, 0.84894284, 0.59270639,
+         0.16404008, 0.59330663, 0.79079147, 0.53856319, 0.31317709],
+        [0.28779841, 0.5179362 , 0.48685724, 0.67563371, 0.69005435,
+         0.38910428, 0.36012764, 0.22852313, 1.00122476, 0.36295217],
+        [1.17205671, 0.31645792, 0.41134709, 0.38488377, 0.46720902,
+         0.17009708, 0.3163768 , 0.93767469, 0.54143958, 0.30539361],
+        [0.51394481, 0.98994353, 0.24180063, 0.26936906, 1.24787203,
+         0.10004305, 0.17487881, 0.56158761, 0.37815937, 0.2101264 ],
+        [0.77058547, 0.36153142, 0.2383185 , 0.51973057, 1.11473996,
+         0.13355534, 0.51362169, 0.38124355, 0.24638296, 0.12983108],
+        [0.23161382, 0.33262207, 0.37651958, 0.3002809 , 0.53330731,
+         0.46736854, 0.35030813, 0.50800666, 0.45003255, 0.53181908],
+        [0.79569171, 0.80317632, 0.22780508, 0.66036303, 0.32791135,
+         0.3222499 , 0.60862028, 0.59715599, 0.66861015, 0.59346048],
+        [0.23516762, 0.42104066, 0.10906437, 0.51697316, 0.07751796,
+         0.2329695 , 0.35251781, 0.16767589, 0.99612623, 0.22901117],
+        [0.36531811, 0.26230636, 0.52019508, 0.40514502, 0.08992194,
+         0.20958681, 0.32817139, 0.48605483, 0.08849553, 0.543278  ],
+        [0.1989101 , 0.33687514, 0.24212059, 0.49657481, 0.92202136,
+         0.5154505 , 0.49319662, 0.50706251, 0.78786178, 0.80543335],
+        [0.59392957, 0.50530186, 0.54975718, 0.84149711, 0.7353697 ,
+         0.17559363, 0.51334477, 0.410001  , 0.45405947, 0.23933661],
+        [0.12805363, 0.31772468, 0.47836505, 0.84090706, 0.18814219,
+         0.14681588, 0.12325393, 0.83964578, 1.00700337, 0.31518499],
+        [0.42998056, 0.7719755 , 0.36704241, 0.64137026, 0.23653779,
+         0.27234276, 0.22177835, 0.62906116, 0.37360522, 0.57762245],
+        [0.25247523, 1.08705291, 1.01556779, 0.6552261 , 0.13455933,
+         0.18798326, 0.06353327, 0.23412107, 0.54038002, 0.54658886],
+        [0.4447241 , 0.10013482, 0.85966777, 0.92632463, 0.68257296,
+         0.20250928, 0.11565589, 0.61316192, 0.6969809 , 0.49717806],
+        [0.15441786, 0.78577349, 0.73430295, 0.2012156 , 0.09273433,
+         0.43654302, 0.31231108, 0.19955456, 0.67286369, 0.21981537],
+        [0.25310264, 0.37490827, 0.55060495, 0.37466108, 0.16940785,
+         0.5588626 , 0.33562987, 0.44778045, 0.39098824, 0.55526617],
+        [0.33318722, 0.37069586, 0.27380996, 0.51531818, 0.45733056,
+         0.16095672, 0.34887335, 0.13062059, 0.41557338, 0.54415202],
+        [0.45861786, 0.77523016, 0.61079524, 1.24020095, 0.79462421,
+         0.71634022, 0.58219854, 0.63011284, 0.37548973, 0.4112205 ],
+        [0.21605996, 0.15926961, 0.72970836, 0.35421801, 0.45230831,
+         0.43245478, 0.13904594, 1.01157055, 0.54029237, 0.32235596],
+        [0.09633455, 0.26005899, 0.63870313, 0.39624893, 0.29115115,
+         0.11683192, 0.40483742, 0.52896543, 0.89061197, 0.71938753],
+        [0.32903473, 0.51087849, 0.28120507, 1.25966729, 0.09759654,
+         0.52805115, 0.46270756, 0.27454264, 0.5785461 , 0.19765368],
+        [0.46978806, 0.49266511, 0.79711684, 0.36032878, 0.65794974,
+         0.50284067, 0.09095999, 0.6242152 , 0.32122274, 0.1848105 ],
+        [0.44525051, 0.85857908, 0.70353564, 0.27676008, 0.46827147,
+         0.152073  , 0.57562888, 1.14973272, 0.32228443, 0.38331201],
+        [0.09026063, 0.71352445, 0.93221972, 0.24437322, 0.63933295,
+         0.51584249, 0.54771836, 0.83265293, 0.26276676, 0.90176408]]),
+ array([[0.57468142, 0.28278389, 0.3330634 , 1.41702368, 1.17672013,
+         1.41681403, 1.12266945, 0.32238794, 0.31354304, 0.88319846],
+        [0.96137591, 0.46216994, 0.36459292, 0.40570848, 1.11504661,
+         0.64356825, 0.63019246, 1.18813006, 0.72254374, 0.33411691],
+        [0.6069314 , 0.82362633, 0.4073849 , 0.50017238, 0.67107943,
+         0.57258386, 0.69105649, 0.411246  , 0.96152291, 0.66561663],
+        [0.60018702, 0.28137669, 0.84911196, 0.36460474, 0.52613343,
+         0.28188104, 0.2886278 , 0.18765056, 0.26549929, 1.08857332],
+        [0.49218007, 1.20339347, 0.42368756, 0.44329396, 0.31795458,
+         0.63809449, 0.68255171, 0.62472407, 0.07430213, 0.46750974],
+        [0.51591607, 0.35584399, 0.45558712, 0.28362005, 0.29146113,
+         0.55408479, 0.0995212 , 0.58057019, 0.44186833, 0.36875154],
+        [0.98291466, 0.45958007, 0.86746958, 1.3227051 , 0.45426222,
+         0.81298136, 0.42838182, 0.55330349, 0.55303244, 0.69767326],
+        [0.44574726, 1.04105934, 0.11116491, 0.35200003, 0.51179808,
+         0.45532254, 0.56203464, 0.34963998, 0.87522053, 0.59949718],
+        [0.87858271, 0.44297553, 0.43007006, 0.37543306, 0.50145982,
+         0.76766482, 0.47069415, 0.41978802, 0.92829958, 0.6480985 ],
+        [0.19124425, 0.99317361, 0.46155881, 0.68218362, 0.66488189,
+         0.41517877, 0.67498202, 0.57417753, 0.44091854, 0.56041584],
+        [0.46993974, 0.37358055, 0.68534583, 1.16193842, 1.02335101,
+         1.00055876, 0.65654089, 1.05433258, 0.91526586, 1.12466749],
+        [0.22346083, 0.15281688, 1.05887064, 0.89598367, 0.48388828,
+         0.57572211, 0.28871364, 0.66475297, 0.4919523 , 0.37316896],
+        [0.49063843, 0.46711475, 0.31404316, 0.42956636, 0.6114951 ,
+         0.78639907, 0.57449105, 0.68216108, 0.55351215, 0.22625712],
+        [0.32456764, 0.5527403 , 0.90416831, 0.56482658, 1.40620947,
+         0.4901026 , 1.14852646, 1.19730516, 0.59422621, 0.20682734],
+        [0.2487608 , 0.45966213, 0.30129721, 0.28035998, 1.20340447,
+         0.38239525, 0.21808095, 0.19296093, 0.14948478, 0.88757398],
+        [0.40845167, 0.58575543, 0.45618205, 0.6621366 , 0.18608227,
+         0.72441488, 0.58210917, 0.61688879, 1.1736596 , 0.62272757],
+        [0.63912586, 1.27049026, 0.38188044, 0.53713287, 0.92102995,
+         0.75125939, 0.42648252, 1.3347031 , 0.37712793, 1.11232863],
+        [0.83756208, 0.54209033, 0.8586598 , 0.34606312, 0.97436399,
+         0.60704047, 0.78803526, 1.0104945 , 0.35164826, 0.30292074],
+        [0.83637718, 0.20387182, 1.07852459, 0.58848833, 0.28761035,
+         0.55610211, 0.47291598, 0.44654855, 1.00761085, 0.29505384],
+        [0.84305123, 0.19187676, 0.79817397, 1.18190493, 0.42696342,
+         0.31676709, 0.3421072 , 0.29858224, 0.56992976, 0.6405229 ],
+        [0.30536842, 0.59735414, 0.78700762, 0.75363705, 0.37005241,
+         0.4443393 , 0.71720506, 0.71356821, 0.51366229, 0.16381725],
+        [0.36680756, 0.78430536, 0.65974184, 0.61792277, 0.50322997,
+         0.36061659, 1.15672058, 0.45000567, 0.4471095 , 0.75620536],
+        [0.41034943, 0.30553683, 0.76982869, 0.80758518, 0.26402464,
+         0.46339751, 0.46939554, 0.91005074, 0.43204702, 0.49231815],
+        [0.23315977, 0.38759659, 0.51668798, 0.21824815, 0.3174757 ,
+         0.88258629, 0.56212237, 0.55462033, 1.01565712, 1.12209696],
+        [0.21713266, 0.5059026 , 0.2325791 , 0.77062575, 0.59847775,
+         0.92401475, 1.08819099, 0.35035358, 0.73314634, 0.67254822]]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mf">0.25</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0625
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+
+<span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
+</pre></div>
+</div>
+<img alt="_images/2022-09-14-vertex-two-sample_11_1.png" src="_images/2022-09-14-vertex-two-sample_11_1.png" />
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Jaewon Chung, Eric B. Bridgeford<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
