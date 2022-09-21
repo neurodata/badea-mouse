@@ -116,15 +116,32 @@ def _bootstrap(
     embedding,
     n_components: int,
     test_case,
+    bootstrap_method="default",
     rescale: bool = False,
     loops: bool = False,
-) -> float:
-    A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-    A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-    X1_hat_simulated, X2_hat_simulated = _embed(
-        A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
-    )
-    t_bootstrap = _difference_norm(
-        X1_hat_simulated, X2_hat_simulated, embedding, test_case
-    )
-    return t_bootstrap
+):
+    if bootstrap_method == "default":
+        A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+        A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+        X1_hat_simulated, X2_hat_simulated = _embed(
+            A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
+        )
+        t_bootstrap = _difference_norm(
+            X1_hat_simulated, X2_hat_simulated, embedding, test_case
+        )
+        return t_bootstrap
+    elif bootstrap_method == "test1":
+        n = X_hat.shape[0]
+        idx = np.random.permutation(n)
+
+        A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+        A2_simulated = rdpg(X_hat[idx], rescale=rescale, loops=loops)
+        X1_hat_simulated, X2_hat_simulated = _embed(
+            A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
+        )
+        t_bootstrap = _difference_norm(
+            X1_hat_simulated, X2_hat_simulated, embedding, test_case
+        )
+        return t_bootstrap
+    else:
+        raise ValueError("Invalid bootstrap_method!")
