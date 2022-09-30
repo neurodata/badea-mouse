@@ -48,8 +48,20 @@ def _check_data():
     return labels, mask
 
 
-def load_vertex_metadata():
+def load_vertex_def():
+    df = pd.read_csv(DATA_DIR / "processed/node_label_dictionary.csv")
+    
+    cols = ['Structure', 'Abbreviation', 'Hemisphere_abbrev', 'Level_1_abbrev', 'Subdivision_new']
+    new_cols = ['Structure', 'Abbreviation', "Hemisphere", 'Level_1', 'Level_2']
+    
+    df = df.loc[:, cols]
+    df.columns = new_cols
+    
+    return df
+    
+    
 
+def load_vertex_metadata():
     """Loads vertex wise labels
 
     Returns
