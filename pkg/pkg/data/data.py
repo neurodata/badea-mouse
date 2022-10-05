@@ -48,7 +48,7 @@ def _check_data():
     return labels, mask
 
 
-def load_vertex_def():
+def load_vertex_df():
     df = pd.read_csv(DATA_DIR / "processed/node_label_dictionary.csv")
     
     cols = ['Structure', 'Abbreviation', 'Hemisphere_abbrev', 'Level_1_abbrev', 'Subdivision_new']
