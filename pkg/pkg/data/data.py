@@ -8,21 +8,37 @@ from graspologic.utils import symmetrize
 
 DATA_DIR = Path(Path(__file__).absolute().parents[3]) / "data"
 
-GENOTYPES = ["APOE22", "APOE33", "APOE44"]
-HEMISPHERES = ["L", "R"]
-SUPER_STRUCTURES = ["FB", "HB", "MB", "VS", "WM"]
-HEMISPHERE_STRUCTURES = [
-    "LFB",
-    "LHB",
-    "LMB",
-    "LVS",
-    "LWM",
-    "RFB",
-    "RHB",
-    "RMB",
-    "RVS",
-    "RWM",
+GENOTYPES = [
+    "APOE22",
+    "APOE33",
+    "APOE44",
 ]
+HEMISPHERES = {
+    "L": "Left",
+    "R": "Right",
+}
+SUPER_STRUCTURES = {
+    "FB": "Forebrain",
+    "HB": "Hindbrain",
+    "MB": "Midbrain",
+    "VS": "Ventricular system",
+    "WM": "White matter",
+}
+SUB_STRUCTURES = {
+    "IS": "Isocortex",
+    "PA": "Pallium",
+    "DI": "Diencephalon",
+    "SP": "Subpallium",
+    "MB": "MB",
+    "BS": "Brain Stem",
+    "PP": "Prepontine",
+    "HB": "HB",
+    "PO": "Pontine",
+    "PM": "Pontomedullar",
+    "ME": "Medullary",
+    "FB": "FB",
+    "VS": "VS",
+}
 
 
 def _check_data():
@@ -48,18 +64,23 @@ def _check_data():
     return labels, mask
 
 
-def load_vertex_def():
+def load_vertex_df():
     df = pd.read_csv(DATA_DIR / "processed/node_label_dictionary.csv")
-    
-    cols = ['Structure', 'Abbreviation', 'Hemisphere_abbrev', 'Level_1_abbrev', 'Subdivision_new']
-    new_cols = ['Structure', 'Abbreviation', "Hemisphere", 'Level_1', 'Level_2']
-    
+
+    cols = [
+        "Structure",
+        "Abbreviation",
+        "Hemisphere_abbrev",
+        "Level_1_abbrev",
+        "Subdivision_new",
+    ]
+    new_cols = ["Structure", "Abbreviation", "Hemisphere", "Level_1", "Level_2"]
+
     df = df.loc[:, cols]
     df.columns = new_cols
-    
+
     return df
-    
-    
+
 
 def load_vertex_metadata():
     """Loads vertex wise labels
