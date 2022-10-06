@@ -8,5 +8,5 @@ from .data import (
     GENOTYPES,
     HEMISPHERES,
     SUPER_STRUCTURES,
-    HEMISPHERE_STRUCTURES,
+    SUB_STRUCTURES,
 )

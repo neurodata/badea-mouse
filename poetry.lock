@@ -2247,6 +2247,17 @@ develop = ["cython (>=0.29.26)"]
 docs = ["ipykernel", "jupyter_client", "matplotlib", "nbconvert", "nbformat", "numpydoc", "pandas-datareader", "sphinx"]
 
 [[package]]
+name = "svgutils"
+version = "0.3.4"
+description = "Python SVG editor"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+lxml = "*"
+
+[[package]]
 name = "tenacity"
 version = "8.1.0"
 description = "Retry code until it succeeds"
@@ -2458,7 +2469,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "82dc7f0ea7c06b01bcf16b8424b18b53980a0ad6b96cc8a9c1565c901b3e5fd5"
+content-hash = "3004fbaece0d61fbb06d099564d7aa931abc538e7f5bab4770242ee640618063"
 
 [metadata.files]
 alabaster = [
@@ -4005,6 +4016,10 @@ statsmodels = [
     {file = "statsmodels-0.13.2-cp39-cp39-win32.whl", hash = "sha256:461c82ab2265fa8457b96afc23ef3ca19f42eb070436e0241b57e58a38863901"},
     {file = "statsmodels-0.13.2-cp39-cp39-win_amd64.whl", hash = "sha256:39daab5a8a9332c8ea83d6464d065080c9ba65f236daf6a64aa18f64ef776fad"},
     {file = "statsmodels-0.13.2.tar.gz", hash = "sha256:77dc292c9939c036a476f1770f9d08976b05437daa229928da73231147cde7d4"},
+]
+svgutils = [
+    {file = "svgutils-0.3.4-py3-none-any.whl", hash = "sha256:4d08524a08126553c1a9bf2639616cf31290adea6fd235a3eb67d77c748abc00"},
+    {file = "svgutils-0.3.4.tar.gz", hash = "sha256:9ef48f44cb1d460a7747dd02694200fda25eb9faf6dea392118def2695e0e053"},
 ]
 tenacity = [
     {file = "tenacity-8.1.0-py3-none-any.whl", hash = "sha256:35525cd47f82830069f0d6b73f7eb83bc5b73ee2fff0437952cedf98b27653ac"},

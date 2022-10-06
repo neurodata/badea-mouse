@@ -19,6 +19,7 @@ black = "^22.8.0"
 scipy = "^1.9.1"
 scikit-learn = "^1.1.2"
 CairoSVG = "^2.5.2"
+svgutils = "^0.3.4"
 
 
 [tool.poetry.dev-dependencies]
