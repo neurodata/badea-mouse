@@ -39,18 +39,6 @@ SUB_STRUCTURES = {
     "FB": "FB",
     "VS": "VS",
 }
-HEMISPHERE_STRUCTURES = [
-    "LFB",
-    "LHB",
-    "LMB",
-    "LVS",
-    "LWM",
-    "RFB",
-    "RHB",
-    "RMB",
-    "RVS",
-    "RWM",
-]
 
 
 def _check_data():
