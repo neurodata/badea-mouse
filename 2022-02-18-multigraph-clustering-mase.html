@@ -462,13 +462,6 @@ title="Print to PDF"
 <p>In this notebook, we will use multiple adjacency spectral embedding (MASE) instead of omnibus embedding to obtain a low dimensional vector representation of vertices in our correlation matrices</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -531,6 +524,240 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">node_labels</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Structure</th>
+      <th>Abbreviation</th>
+      <th>Hemisphere</th>
+      <th>Level_1</th>
+      <th>Level_2</th>
+      <th>Level_3</th>
+      <th>Level_4</th>
+      <th>Subdivisions_7</th>
+      <th>index</th>
+      <th>index2</th>
+      <th>clusfound</th>
+      <th>Subdivisions_7_nowm</th>
+      <th>Hemisphere_abbrev</th>
+      <th>Level_1_abbrev</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Cingulate_Cortex_Area_24a</td>
+      <td>A24a</td>
+      <td>Left</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>1_isocortex</td>
+      <td>2_cingulate_cortex</td>
+      <td>1_isocortex</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>1_isocortex</td>
+      <td>L</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cingulate_Cortex_Area_24a_prime</td>
+      <td>A24aPrime</td>
+      <td>Left</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>1_isocortex</td>
+      <td>2_cingulate_cortex</td>
+      <td>1_isocortex</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>0</td>
+      <td>1_isocortex</td>
+      <td>L</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Cingulate_Cortex_Area_24b</td>
+      <td>A24b</td>
+      <td>Left</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>1_isocortex</td>
+      <td>2_cingulate_cortex</td>
+      <td>1_isocortex</td>
+      <td>3</td>
+      <td>3.0</td>
+      <td>0</td>
+      <td>1_isocortex</td>
+      <td>L</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cingulate_Cortex_Area_24b_prime</td>
+      <td>A24bPrime</td>
+      <td>Left</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>1_isocortex</td>
+      <td>2_cingulate_cortex</td>
+      <td>1_isocortex</td>
+      <td>4</td>
+      <td>4.0</td>
+      <td>0</td>
+      <td>1_isocortex</td>
+      <td>L</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Cingulate_Cortex_Area_29a</td>
+      <td>A29a</td>
+      <td>Left</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>1_isocortex</td>
+      <td>2_cingulate_cortex</td>
+      <td>1_isocortex</td>
+      <td>5</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>1_isocortex</td>
+      <td>L</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>327</th>
+      <td>IntermediateReticularNucleus</td>
+      <td>IRN.1</td>
+      <td>Right</td>
+      <td>3_hindbrain</td>
+      <td>2_pontine_hindbrain</td>
+      <td>NaN</td>
+      <td>axial_hindbrain_white_matter</td>
+      <td>6_hindbrain</td>
+      <td>328</td>
+      <td>1162.0</td>
+      <td>0</td>
+      <td>6_hindbrain</td>
+      <td>R</td>
+      <td>HB</td>
+    </tr>
+    <tr>
+      <th>328</th>
+      <td>PosteriorDorsal_ParaventricularMedialParvicell...</td>
+      <td>PHD_PaMP_Post_and_LatHy.1</td>
+      <td>Right</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>8_rostral_secondary_prosencephalon</td>
+      <td>5_hypothalamus</td>
+      <td>4_diencephalon</td>
+      <td>329</td>
+      <td>1163.0</td>
+      <td>0</td>
+      <td>4_diencephalon</td>
+      <td>R</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>329</th>
+      <td>Prerubral_Forel</td>
+      <td>PR_p3Tg_L.1</td>
+      <td>Right</td>
+      <td>1_forebrain</td>
+      <td>2_diencephalon</td>
+      <td>p2_and_p3</td>
+      <td>17_thalamus</td>
+      <td>4_diencephalon</td>
+      <td>330</td>
+      <td>1164.0</td>
+      <td>0</td>
+      <td>4_diencephalon</td>
+      <td>R</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>330</th>
+      <td>PVG_of_Hypothalamus</td>
+      <td>PVG.1</td>
+      <td>Right</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>8_rostral_secondary_prosencephalon</td>
+      <td>5_hypothalamus</td>
+      <td>4_diencephalon</td>
+      <td>331</td>
+      <td>1165.0</td>
+      <td>0</td>
+      <td>4_diencephalon</td>
+      <td>R</td>
+      <td>FB</td>
+    </tr>
+    <tr>
+      <th>331</th>
+      <td>Basal Lateral Amygdala</td>
+      <td>BLA.1</td>
+      <td>Right</td>
+      <td>1_forebrain</td>
+      <td>1_secondary_prosencephalon</td>
+      <td>6_subpallium</td>
+      <td>8_pallial_and_subpallial_amygdala</td>
+      <td>2_pallium</td>
+      <td>332</td>
+      <td>1166.0</td>
+      <td>0</td>
+      <td>2_pallium</td>
+      <td>R</td>
+      <td>FB</td>
+    </tr>
+  </tbody>
+</table>
+<p>332 rows × 14 columns</p>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

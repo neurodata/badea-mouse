@@ -417,21 +417,27 @@ title="Print to PDF"
 
 <span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
 <span class="kn">import</span> <span class="nn">hyppo</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">hyppo.ksample</span> <span class="kn">import</span> <span class="n">MANOVA</span><span class="p">,</span> <span class="n">KSample</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">kruskal</span>
+<span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
 <span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
 
 <span class="kn">from</span> <span class="nn">pkg.data</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">GENOTYPES</span><span class="p">,</span>
-    <span class="n">HEMISPHERE_STRUCTURES</span><span class="p">,</span>
     <span class="n">HEMISPHERES</span><span class="p">,</span>
+    <span class="n">SUB_STRUCTURES</span><span class="p">,</span>
     <span class="n">SUPER_STRUCTURES</span><span class="p">,</span>
+    <span class="n">load_vertex_df</span><span class="p">,</span>
     <span class="n">load_vertex_metadata</span><span class="p">,</span>
     <span class="n">load_volume_corr</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;monospace&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -482,12 +488,7 @@ title="Print to PDF"
 
 <span class="n">correlations</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">load_volume_corr</span><span class="p">()</span>
 
-<span class="p">(</span>
-    <span class="n">vertex_name</span><span class="p">,</span>
-    <span class="n">vertex_hemispheres</span><span class="p">,</span>
-    <span class="n">vertex_structures</span><span class="p">,</span>
-    <span class="n">vertex_hemisphere_structures</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">=</span> <span class="n">load_vertex_metadata</span><span class="p">()</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">load_vertex_df</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -508,6 +509,7 @@ title="Print to PDF"
         <span class="n">xticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">yticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
 </pre></div>
@@ -524,13 +526,8 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># use kruskal-wallis for speed</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">correlations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">correlations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">kruskal</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">correlations</span><span class="p">])</span>
 </pre></div>
@@ -565,39 +562,52 @@ title="Print to PDF"
     <span class="k">return</span> <span class="n">out</span>
 
 
-<span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="n">vertex_labels</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;kruskal&quot;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;kruskal&quot;</span><span class="p">:</span>
-        <span class="n">tester</span> <span class="o">=</span> <span class="n">kruskal</span>
-    <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">:</span>
-        <span class="n">tester</span> <span class="o">=</span> <span class="n">ksample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span>
-
+<span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span>
+    <span class="n">graphs</span><span class="p">,</span> <span class="n">vertex_labels</span><span class="p">,</span> <span class="n">hierarchy_level</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;kruskal&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    hierarchy_level : int</span>
+<span class="sd">        0 is top level, 1 is next, etc</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_graphs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
 
     <span class="n">pairs</span> <span class="o">=</span> <span class="n">group_labels</span><span class="p">(</span><span class="n">vertex_labels</span><span class="p">)</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">pair</span><span class="p">,</span> <span class="p">(</span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
-        <span class="n">num_verts</span> <span class="o">=</span> <span class="n">rdx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">num_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">rdx</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">cdx</span><span class="o">.</span><span class="n">sum</span><span class="p">()])</span>
         <span class="n">triu_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">num_verts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rdx</span> <span class="o">==</span> <span class="n">cdx</span><span class="p">):</span>  <span class="c1"># deal with off diagonals</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rdx</span> <span class="o">==</span> <span class="n">cdx</span><span class="p">):</span>  <span class="c1"># deal with off diagonal blocks</span>
             <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># when main diagonal block, only use upper triangle</span>
             <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">][</span><span class="n">triu_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
 
-        <span class="c1"># res = tester(*to_test)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">tester</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">to_test</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
+            <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">to_test</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">to_test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">,</span> <span class="n">workers</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kruskal&quot;</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">kruskal</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;manova&quot;</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">MANOVA</span><span class="p">()</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
+        <span class="c1"># res = tester(*[np.abs(i) for i in to_test])</span>
         <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
 
-        <span class="n">to_append</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">pair</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">]</span>
+        <span class="n">to_append</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">pair</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">hierarchy_level</span><span class="p">]</span>
         <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_append</span><span class="p">)</span>
 
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">,</span> <span class="s2">&quot;statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">]</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">,</span> <span class="s2">&quot;statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;hierarchy_level&quot;</span><span class="p">]</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
-    <span class="n">is_sig</span><span class="p">,</span> <span class="n">corrected_pvalues</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;holm&quot;</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_sig</span>
+    <span class="n">non_nan</span> <span class="o">=</span> <span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">pvalue</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
+    <span class="n">is_sig</span><span class="p">,</span> <span class="n">corrected_pvalues</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">non_nan</span><span class="p">]</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_sig</span>
 
     <span class="k">return</span> <span class="n">df</span>
 </pre></div>
@@ -606,101 +616,237 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">run_test</span><span class="p">(</span><span class="n">correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">labels</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="n">vertex_hemispheres</span><span class="p">,</span>
-        <span class="n">vertex_structures</span><span class="p">,</span>
-        <span class="n">vertex_hemisphere_structures</span><span class="p">,</span>
-    <span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vertex_hemispheres</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">Hemisphere</span><span class="o">.</span><span class="n">values</span>
+<span class="n">vertex_structures</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">Level_1</span><span class="o">.</span><span class="n">values</span>
+<span class="n">vertex_hemisphere_structures</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">Hemisphere</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">meta</span><span class="o">.</span><span class="n">Level_1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">vertex_hemisphere_substructures</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">meta</span><span class="o">.</span><span class="n">Hemisphere</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">meta</span><span class="o">.</span><span class="n">Level_1</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">meta</span><span class="o">.</span><span class="n">Level_2</span>
+<span class="p">)</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">run_test</span><span class="p">(</span><span class="n">correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;manova&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">vertex_hemispheres</span><span class="p">,</span>
+            <span class="n">vertex_structures</span><span class="p">,</span>
+            <span class="n">vertex_hemisphere_structures</span><span class="p">,</span>
+            <span class="n">vertex_hemisphere_substructures</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
 <span class="p">]</span>
+
+<span class="n">dfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../results/outputs/volume_correlation_3sample_apriori.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">squareize</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">out</span><span class="p">)]</span> <span class="o">=</span> <span class="n">vec</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span><span class="p">(</span><span class="n">out</span><span class="p">)]</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span><span class="p">(</span><span class="n">out</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Bbox</span>
+
+
+<span class="k">def</span> <span class="nf">shrink_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span>
+    <span class="n">new_pos</span> <span class="o">=</span> <span class="n">Bbox</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_heatmaps</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">hiers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dfs</span><span class="o">.</span><span class="n">hierarchy_level</span><span class="p">)</span>
+    <span class="n">n_plots</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hiers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_plots</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="n">ncols</span><span class="o">=</span><span class="n">n_plots</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="n">n_plots</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">n_plots</span> <span class="o">*</span> <span class="mf">3.5</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">3.8</span> <span class="o">*</span> <span class="n">n_plots</span><span class="p">),</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+        <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">),</span>
+        <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">axs</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_gridspec</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+    <span class="n">cax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># cax = axs[0]</span>
+
+    <span class="n">heatmap_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span>
+        <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">hier</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hiers</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="n">dfs</span><span class="o">.</span><span class="n">hierarchy_level</span> <span class="o">==</span> <span class="n">hier</span><span class="p">]</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">region1</span><span class="p">))</span>
+
+        <span class="n">pvec</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corrected_pvalue</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">pvals</span> <span class="o">=</span> <span class="n">squareize</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">pvec</span><span class="p">)</span>
+        <span class="n">pvals</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pvals</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">plot_pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pvals</span><span class="p">)</span>
+        <span class="n">plot_pvalues</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">plot_pvalues</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">150</span>
+        <span class="c1"># plot_pvalues[np.isnan(plot_pvalues)] = 0</span>
+
+        <span class="c1"># Labels for x y axis</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">region1</span><span class="p">))</span>
+
+        <span class="c1"># make mask</span>
+        <span class="n">triu_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">pvals</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">triu_idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Plot heatmap</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+            <span class="n">plot_pvalues</span><span class="p">,</span>
+            <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">yticklabels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="n">xticklabels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">heatmap_kws</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+            <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="n">labelrotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+            <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="n">labelrotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+            <span class="n">pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># ax.tick_params(left=False, bottom=False, pad=0)</span>
+
+        <span class="c1"># Make x&#39;s and o&#39;s</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_facecolors</span><span class="p">()</span>
+        <span class="n">raveled_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel_multi_index</span><span class="p">(</span><span class="n">triu_idx</span><span class="p">,</span> <span class="n">plot_pvalues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">is_significant</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">raveled_idx</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">significant</span><span class="p">):</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+
+            <span class="c1"># REF: seaborn heatmap</span>
+            <span class="n">lum</span> <span class="o">=</span> <span class="n">relative_luminance</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="n">text_color</span> <span class="o">=</span> <span class="s2">&quot;.15&quot;</span> <span class="k">if</span> <span class="n">lum</span> <span class="o">&gt;</span> <span class="mf">0.408</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span>
+            <span class="n">lw</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">/</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">is_significant</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+                <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+                <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">is_significant</span><span class="p">):</span>
+                <span class="n">circ</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">),</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">invert_xaxis</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">cbar</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+            <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">,</span>
+            <span class="n">fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">shrink</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">ticklocation</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$log_</span><span class="si">{10}</span><span class="s2">$&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">corrected&quot;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">p-value&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">cax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)],</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;$\alpha$&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">),</span>
+            <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
+            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arrowstyle&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;linewidth&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;relpos&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)},</span>
+        <span class="p">)</span>
+        <span class="c1"># shrink_axis(cax, scale=0.8, shift=0.05)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cax</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hiers</span><span class="p">)):</span>
+        <span class="n">subplot_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;(B)&quot;</span><span class="p">,</span> <span class="s2">&quot;(C)&quot;</span><span class="p">,</span> <span class="s2">&quot;(D)&quot;</span><span class="p">]</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="mf">1.05</span><span class="p">,</span>
+            <span class="n">subplot_labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">plot_heatmaps</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[  region1 region2    statistic  pvalue  corrected_pvalue  significant
- 0       L       L  1781.397984     0.0               0.0         True
- 1       L       R  4009.296088     0.0               0.0         True
- 2       R       R  2049.432691     0.0               0.0         True,
-    region1 region2    statistic         pvalue  corrected_pvalue  significant
- 0       FB      FB  1399.243796  1.439032e-304     1.870741e-303         True
- 1       FB      HB  1990.354493   0.000000e+00      0.000000e+00         True
- 2       FB      MB   637.346526  3.999082e-139     3.999082e-138         True
- 3       FB      VS   138.854306   7.049699e-31      4.229819e-30         True
- 4       FB      WM  1114.337907  1.058274e-242     1.269928e-241         True
- 5       HB      HB   918.642900  3.305436e-200     3.635980e-199         True
- 6       HB      MB   575.622276  1.012071e-125     8.096567e-125         True
- 7       HB      VS   106.968738   5.916075e-24      2.958038e-23         True
- 8       HB      WM  1509.898243   0.000000e+00      0.000000e+00         True
- 9       MB      MB    86.710945   1.482373e-19      5.929492e-19         True
- 10      MB      VS    35.176465   2.298940e-08      4.597880e-08         True
- 11      MB      WM   601.428697  2.520100e-131     2.268090e-130         True
- 12      VS      VS     2.636522   2.676003e-01      2.676003e-01        False
- 13      VS      WM    77.992280   1.159288e-17      3.477865e-17         True
- 14      WM      WM   485.455247  3.843549e-106     2.690485e-105         True,
-    region1 region2   statistic         pvalue  corrected_pvalue  significant
- 0      LFB     LFB  235.212902   8.397832e-52      3.191176e-50         True
- 1      LFB     LHB  482.940988  1.351129e-105     7.025872e-104         True
- 2      LFB     LMB  196.260023   2.413668e-43      7.965104e-42         True
- 3      LFB     LVS   34.180143   3.783347e-08      7.188359e-07         True
- 4      LFB     LWM  207.921680   7.085669e-46      2.479984e-44         True
- 5      LFB     RFB  744.379281  2.291358e-162     1.260247e-160         True
- 6      LFB     RHB  379.467803   3.977531e-83      1.869440e-81         True
- 7      LFB     RMB  114.497368   1.371553e-25      3.840347e-24         True
- 8      LFB     RVS   27.310678   1.173712e-06      1.681141e-05         True
- 9      LFB     RWM  260.123841   3.272093e-57      1.374279e-55         True
- 10     LHB     LHB  254.418307   5.672397e-56      2.325683e-54         True
- 11     LHB     LMB  186.200696   3.690054e-41      1.143917e-39         True
- 12     LHB     LVS   27.681684   9.749867e-07      1.559979e-05         True
- 13     LHB     LWM  374.793109   4.118228e-82      1.894385e-80         True
- 14     LHB     RFB  629.702856  1.827099e-137     9.866336e-136         True
- 15     LHB     RHB  430.395183   3.474350e-94      1.702431e-92         True
- 16     LHB     RMB   88.048297   7.595480e-20      1.746960e-18         True
- 17     LHB     RVS   22.708052   1.172220e-05      1.289442e-04         True
- 18     LHB     RWM  304.083018   9.315615e-67      4.005714e-65         True
- 19     LMB     LMB   36.362614   1.270453e-08      2.540906e-07         True
- 20     LMB     LVS   15.172845   5.072927e-04      5.072927e-03         True
- 21     LMB     LWM  218.265362   4.020488e-48      1.447376e-46         True
- 22     LMB     RFB  204.878189   3.245387e-45      1.103431e-43         True
- 23     LMB     RHB  226.947363   5.236081e-50      1.937350e-48         True
- 24     LMB     RMB   43.168627   4.227189e-10      8.877098e-09         True
- 25     LMB     RVS    9.318779   9.472243e-03      5.683346e-02        False
- 26     LMB     RWM  191.900860   2.134311e-42      6.829794e-41         True
- 27     LVS     LVS    1.866667   3.932407e-01      1.000000e+00        False
- 28     LVS     LWM   13.198298   1.361526e-03      1.089221e-02         True
- 29     LVS     RFB   30.162822   2.819853e-07      4.793750e-06         True
- 30     LVS     RHB   34.100761   3.936532e-08      7.188359e-07         True
- 31     LVS     RMB    7.440879   2.422332e-02      1.211166e-01        False
- 32     LVS     RVS    0.603175   7.396433e-01      1.000000e+00        False
- 33     LVS     RWM   27.403006   1.120761e-06      1.681141e-05         True
- 34     LWM     LWM  145.000327   3.262715e-32      9.788145e-31         True
- 35     LWM     RFB  343.005254   3.291209e-75      1.448132e-73         True
- 36     LWM     RHB  471.404749  4.322742e-103     2.204599e-101         True
- 37     LWM     RMB  103.768453   2.930668e-23      7.619737e-22         True
- 38     LWM     RVS   13.898179   9.595083e-04      8.635575e-03         True
- 39     LWM     RWM  243.393075   1.405612e-53      5.481886e-52         True
- 40     RFB     RFB  446.472781   1.121160e-97      5.605799e-96         True
- 41     RFB     RHB  526.728952  4.190456e-115     2.220942e-113         True
- 42     RFB     RMB  136.910739   1.862991e-30      5.402674e-29         True
- 43     RFB     RVS   50.970192   8.549947e-12      1.880988e-10         True
- 44     RFB     RWM  359.594212   8.224491e-79      3.701021e-77         True
- 45     RHB     RHB  250.798467   3.465811e-55      1.386325e-53         True
- 46     RHB     RMB   94.797045   2.600658e-21      6.241579e-20         True
- 47     RHB     RVS   24.562919   4.636923e-06      5.564308e-05         True
- 48     RHB     RWM  379.565422   3.788052e-83      1.818265e-81         True
- 49     RMB     RMB   12.915381   1.568414e-03      1.097890e-02         True
- 50     RMB     RVS    6.363956   4.150348e-02      1.660139e-01        False
- 51     RMB     RWM  101.131899   1.095184e-22      2.737960e-21         True
- 52     RVS     RVS    1.066667   5.866462e-01      1.000000e+00        False
- 53     RVS     RWM   25.849484   2.437002e-06      3.168103e-05         True
- 54     RWM     RWM  105.173743   1.451483e-23      3.919004e-22         True]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_25300/797048962.py:42: RuntimeWarning: divide by zero encountered in log10
+  plot_pvalues = np.log10(pvals)
+</pre></div>
+</div>
+<img alt="_images/2022-09-09-volume-correlation-analysis_14_1.png" src="_images/2022-09-09-volume-correlation-analysis_14_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;./figures/apriori_ksample.pdf&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

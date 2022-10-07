@@ -461,36 +461,29 @@ title="Print to PDF"
 <h1>Hierarchical Clustering Analysis - Omnibus Embedding<a class="headerlink" href="#hierarchical-clustering-analysis-omnibus-embedding" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">graspologic</span> <span class="k">as</span> <span class="nn">gp</span>
 <span class="kn">import</span> <span class="nn">hyppo</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
-
+<span class="kn">import</span> <span class="nn">plotly.io</span> <span class="k">as</span> <span class="nn">pio</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
+
+<span class="kn">from</span> <span class="nn">pkg.data</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GENOTYPES</span><span class="p">,</span>
+    <span class="n">HEMISPHERE_STRUCTURES</span><span class="p">,</span>
+    <span class="n">HEMISPHERES</span><span class="p">,</span>
+    <span class="n">SUPER_STRUCTURES</span><span class="p">,</span>
+    <span class="n">load_vertex_metadata</span><span class="p">,</span>
+    <span class="n">load_volume_corr</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
-
-<span class="kn">import</span> <span class="nn">plotly.io</span> <span class="k">as</span> <span class="nn">pio</span>
-<span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;png&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ## Read the brain region information</span>
-<span class="c1"># t = pd.read_excel(&quot;../data/raw/CHASSSYMM3AtlasLegends.xlsx&quot;, engine=&#39;openpyxl&#39;)</span>
-
-<span class="c1"># pd.concat([t, cluster_label_df], axis=1).to_csv(&quot;CHASSSYMM3AtlasLegends.csv&quot;, index=False)</span>
-
-<span class="c1"># out = pd.concat([node_labels, cluster_label_df], axis=1)</span>
-
-<span class="c1"># out.to_csv(&quot;./out.csv&quot;)</span>
+<span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;png&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -498,29 +491,14 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Read the data</span>
+<span class="n">correlations</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">load_volume_corr</span><span class="p">()</span>
 
-<span class="n">key</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/key.csv&#39;</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/mouses-volumes.csv&#39;</span><span class="p">)</span>
-
-<span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">DWI</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">genotypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;APOE22&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE33&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE44&#39;</span><span class="p">]</span>
-
-<span class="n">gen_animals</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">}</span>
-
-<span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">:</span>
-    <span class="n">gen_animals</span><span class="p">[</span><span class="n">genotype</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="s1">&#39;Genotype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">genotype</span><span class="p">][</span><span class="s1">&#39;DWI&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-<span class="n">vol_dat</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">}</span>
-    
-<span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span><span class="p">:</span>
-    <span class="n">vol_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gen_animals</span><span class="p">[</span><span class="n">genotype</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    
-<span class="c1">## Compute correlations</span>
-<span class="n">cor_dat</span> <span class="o">=</span> <span class="p">{</span><span class="n">genotype</span><span class="p">:</span> <span class="n">gp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">genotype</span><span class="p">,</span> <span class="n">dat</span><span class="p">)</span> <span class="ow">in</span> <span class="n">vol_dat</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-
-<span class="c1">## Node hierarchical label data</span>
-<span class="n">node_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/processed/node_label_dictionary.csv&quot;</span><span class="p">)</span>
+<span class="p">(</span>
+    <span class="n">vertex_name</span><span class="p">,</span>
+    <span class="n">vertex_hemispheres</span><span class="p">,</span>
+    <span class="n">vertex_structures</span><span class="p">,</span>
+    <span class="n">vertex_hemisphere_structures</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">=</span> <span class="n">load_vertex_metadata</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -529,32 +507,28 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot to make sure nothing is wrong</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
-    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> 
-    <span class="c1">#constrained_layout=True, </span>
+    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
 <span class="p">)</span>
 
-
-<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">genotype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cor_dat</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">correlations</span><span class="p">)):</span>
     <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">adjplot</span><span class="p">(</span>
-        <span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span> 
+        <span class="n">correlations</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">meta</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span>
-        <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Hemisphere_abbrev&#39;</span><span class="p">,</span> <span class="s1">&#39;Level_1_abbrev&#39;</span><span class="p">],</span>
+        <span class="n">meta</span><span class="o">=</span><span class="n">vertex_name</span><span class="p">,</span>
+        <span class="c1">#group=[&quot;Hemisphere_abbrev&quot;],</span>
     <span class="p">)</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">genotype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        
-        
-<span class="c1">#fig.tight_layout(pad=3.0)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GENOTYPES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_4_0.png" src="_images/2022-02-02-multigraph-clustering_4_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_3_0.png" src="_images/2022-02-02-multigraph-clustering_3_0.png" />
 </div>
 </div>
 <section id="embed-the-data-simultaneously-using-omnibus-embedding">
@@ -588,7 +562,9 @@ title="Print to PDF"
 
 <span class="n">cluster_labels</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">Xhats</span><span class="p">),</span> <span class="n">fcluster</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">cluster_label_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cluster_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cluster_level_1&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_level_2&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_level_3&quot;</span><span class="p">])</span>
+<span class="n">cluster_label_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">cluster_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cluster_level_1&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_level_2&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_level_3&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -605,34 +581,37 @@ title="Print to PDF"
 
     <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">levels</span><span class="p">):</span>
         <span class="n">upper_cluster_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">label_matrix</span><span class="p">[:,</span> <span class="n">level</span><span class="p">])</span>
-        
+
         <span class="k">for</span> <span class="n">upper_cluster_id</span> <span class="ow">in</span> <span class="n">upper_cluster_ids</span><span class="p">:</span>
             <span class="n">lower_cluster_ids</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-                <span class="n">label_matrix</span><span class="p">[</span><span class="n">label_matrix</span><span class="p">[:,</span> <span class="n">level</span><span class="p">]</span> <span class="o">==</span> <span class="n">upper_cluster_id</span><span class="p">][:,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span>
+                <span class="n">label_matrix</span><span class="p">[</span><span class="n">label_matrix</span><span class="p">[:,</span> <span class="n">level</span><span class="p">]</span> <span class="o">==</span> <span class="n">upper_cluster_id</span><span class="p">][:,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lower_cluster_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lower_cluster_ids</span><span class="p">):</span>
                 <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">upper_cluster_id</span><span class="p">,</span> <span class="n">lower_cluster_id</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
 
     <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-    
+
     <span class="n">source</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">target</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
-    
+
     <span class="k">return</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">value</span>
+
 
 <span class="k">def</span> <span class="nf">append_apriori_labels</span><span class="p">(</span><span class="n">apriori_labels</span><span class="p">,</span> <span class="n">cluster_matrix</span><span class="p">):</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
     <span class="n">apriori_labels_encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">apriori_labels</span><span class="p">)</span>
     <span class="n">apriori_labels_encoded</span> <span class="o">=</span> <span class="n">apriori_labels_encoded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    
+
     <span class="c1"># Increase the original cluster_matrix labels</span>
     <span class="n">cluster_matrix_</span> <span class="o">=</span> <span class="n">cluster_matrix</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">apriori_labels_encoded</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    
+
     <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">apriori_labels_encoded</span><span class="p">,</span> <span class="n">cluster_matrix_</span><span class="p">])</span>
-    
+
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+
 
 <span class="n">hemispheric_clusters</span><span class="p">,</span> <span class="n">encoded_labels</span> <span class="o">=</span> <span class="n">append_apriori_labels</span><span class="p">(</span><span class="n">node_labels</span><span class="o">.</span><span class="n">Hemisphere</span><span class="p">,</span> <span class="n">cluster_labels</span><span class="p">)</span>
 
@@ -643,18 +622,20 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
-    <span class="n">node</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="n">pad</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
-      <span class="n">thickness</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
-      <span class="n">line</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">),</span>
-      <span class="n">label</span> <span class="o">=</span> <span class="n">encoded_labels</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">hemispheric_clusters</span><span class="p">))]</span>
-    <span class="p">),</span>
-    <span class="n">link</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="p">,</span>
-      <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
-  <span class="p">))])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
+            <span class="n">node</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">pad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">thickness</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">encoded_labels</span>
+                <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">hemispheric_clusters</span><span class="p">))],</span>
+            <span class="p">),</span>
+            <span class="n">link</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Hemispheric Clustering&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
@@ -662,7 +643,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_12_0.png" src="_images/2022-02-02-multigraph-clustering_12_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_11_0.png" src="_images/2022-02-02-multigraph-clustering_11_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -676,18 +657,19 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
-    <span class="n">node</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="n">pad</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
-      <span class="n">thickness</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
-      <span class="n">line</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">),</span>
-      <span class="n">label</span> <span class="o">=</span> <span class="n">encoded_labels</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">level_1_clusters</span><span class="p">[</span><span class="mi">0</span><span class="p">]))],</span>
-    <span class="p">),</span>
-    <span class="n">link</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="p">,</span>
-      <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
-  <span class="p">))])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
+            <span class="n">node</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">pad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">thickness</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">encoded_labels</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">level_1_clusters</span><span class="p">[</span><span class="mi">0</span><span class="p">]))],</span>
+            <span class="p">),</span>
+            <span class="n">link</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Level 1 Clustering&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
@@ -695,7 +677,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_14_0.png" src="_images/2022-02-02-multigraph-clustering_14_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_13_0.png" src="_images/2022-02-02-multigraph-clustering_13_0.png" />
 </div>
 </div>
 </section>
@@ -860,32 +842,32 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot to make sure nothing is wrong</span>
 <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-        <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
-        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> 
-        <span class="c1">#constrained_layout=True, </span>
+        <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="c1"># constrained_layout=True,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-        <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
     <span class="p">)</span>
-    
+
     <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">genotype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cor_dat</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
         <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">adjplot</span><span class="p">(</span>
-            <span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span> 
+            <span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
-            <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Cluster_</span><span class="si">{</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+            <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Cluster_</span><span class="si">{</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">genotype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        
-    <span class="c1">#fig.savefig(f&quot;./figures/2022-02-02-multigraph-clustering-level-{l + 1}.png&quot;, bbox_inches=&#39;tight&#39;)</span>
+
+    <span class="c1"># fig.savefig(f&quot;./figures/2022-02-02-multigraph-clustering-level-{l + 1}.png&quot;, bbox_inches=&#39;tight&#39;)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_17_0.png" src="_images/2022-02-02-multigraph-clustering_17_0.png" />
-<img alt="_images/2022-02-02-multigraph-clustering_17_1.png" src="_images/2022-02-02-multigraph-clustering_17_1.png" />
-<img alt="_images/2022-02-02-multigraph-clustering_17_2.png" src="_images/2022-02-02-multigraph-clustering_17_2.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_16_0.png" src="_images/2022-02-02-multigraph-clustering_16_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_16_1.png" src="_images/2022-02-02-multigraph-clustering_16_1.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_16_2.png" src="_images/2022-02-02-multigraph-clustering_16_2.png" />
 </div>
 </div>
 <p>It seems like cluster structures are predominantly driven by the large correlations in the APOE3 genotype</p>
@@ -893,30 +875,30 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot to make sure nothing is wrong</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
-    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> 
-    <span class="c1">#constrained_layout=True, </span>
+    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="c1"># constrained_layout=True,</span>
     <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">genotype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cor_dat</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
     <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">adjplot</span><span class="p">(</span>
-        <span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span> 
+        <span class="n">cor_dat</span><span class="p">[</span><span class="n">genotype</span><span class="p">],</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
-        <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cluster_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Cluster_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Cluster_3&#39;</span><span class="p">],</span>
+        <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Cluster_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Cluster_2&quot;</span><span class="p">,</span> <span class="s2">&quot;Cluster_3&quot;</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">genotype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    
-<span class="c1">#fig.savefig(f&quot;./figures/2022-02-02-multigraph-clustering-level-all.png&quot;, bbox_inches=&#39;tight&#39;)</span>
+
+<span class="c1"># fig.savefig(f&quot;./figures/2022-02-02-multigraph-clustering-level-all.png&quot;, bbox_inches=&#39;tight&#39;)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_19_0.png" src="_images/2022-02-02-multigraph-clustering_19_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_18_0.png" src="_images/2022-02-02-multigraph-clustering_18_0.png" />
 </div>
 </div>
 </section>
@@ -935,13 +917,13 @@ H_A:&amp; \qquad \text{At least one pair of distributions is different}
 
     <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pvals</span><span class="p">)</span>
     <span class="n">corrected_alpha</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="n">m</span>
-    
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">sorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">corrected_alpha</span><span class="p">:</span>
             <span class="n">corrected_alpha</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">break</span>
-    
+
     <span class="k">return</span> <span class="n">corrected_alpha</span>
 </pre></div>
 </div>
@@ -954,17 +936,17 @@ H_A:&amp; \qquad \text{At least one pair of distributions is different}
 <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cluster_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
     <span class="n">level_labels</span> <span class="o">=</span> <span class="n">cluster_labels</span><span class="p">[:,</span> <span class="n">level</span><span class="p">]</span>
     <span class="n">uniques</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">level_labels</span><span class="p">)</span>
-    
+
     <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">uniques</span><span class="p">:</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">level_labels</span> <span class="o">==</span> <span class="n">cluster</span><span class="p">)</span>
-        
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">level_labels</span> <span class="o">==</span> <span class="n">cluster</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xhat</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">Xhat</span> <span class="ow">in</span> <span class="n">Xhats</span><span class="p">]</span>
-        
+
         <span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
         <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span>
-        
+
         <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">level</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">pval</span><span class="p">))</span>
-        
+
 <span class="n">ksample_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Cluster_level&quot;</span><span class="p">,</span> <span class="s2">&quot;Cluster_id&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
 
 <span class="n">corrected_alpha</span> <span class="o">=</span> <span class="n">holm_bonferroni</span><span class="p">(</span><span class="n">ksample_df</span><span class="o">.</span><span class="n">pval</span><span class="p">)</span>
@@ -1122,7 +1104,7 @@ H_A:&amp; \qquad F_i \neq F_j
 <p>where <span class="math notranslate nohighlight">\(i, j\)</span> denotes a particular genotype. Again, we use distance correlation with Holm-Bonferroni correction.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genotypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;APOE22&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE33&#39;</span><span class="p">,</span> <span class="s1">&#39;APOE44&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genotypes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;APOE22&quot;</span><span class="p">,</span> <span class="s2">&quot;APOE33&quot;</span><span class="p">,</span> <span class="s2">&quot;APOE44&quot;</span><span class="p">]</span>
 
 <span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
 
@@ -1133,7 +1115,7 @@ H_A:&amp; \qquad F_i \neq F_j
 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cluster_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">cluster_id</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Cluster_id</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">cluster_labels</span><span class="p">[:,</span> <span class="n">row</span><span class="o">.</span><span class="n">Cluster_level</span><span class="p">]</span> <span class="o">==</span> <span class="n">cluster_id</span>
-    
+
     <span class="n">cluster_Xhat</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xhat</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">Xhat</span> <span class="ow">in</span> <span class="n">Xhats</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">genotypes</span><span class="p">):</span>
@@ -1141,15 +1123,15 @@ H_A:&amp; \qquad F_i \neq F_j
             <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="n">h</span><span class="p">:</span>
-                <span class="c1">#res.append([cluster_id, g, h, 1])</span>
+                <span class="c1"># res.append([cluster_id, g, h, 1])</span>
                 <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ksample</span> <span class="o">=</span> <span class="n">hyppo</span><span class="o">.</span><span class="n">ksample</span><span class="o">.</span><span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;dcorr&quot;</span><span class="p">)</span>
 
                 <span class="n">_</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">ksample</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">cluster_Xhat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cluster_Xhat</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">Cluster_level</span><span class="p">,</span> <span class="n">cluster_id</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">pval</span><span class="p">])</span>
-                
-<span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cluster_level&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_id&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype_2&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cluster_level&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster_id&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype_2&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
 <span class="n">res</span><span class="p">[</span><span class="s2">&quot;log(pval)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">pval</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1173,7 +1155,7 @@ H_A:&amp; \qquad F_i \neq F_j
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">nrows</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
@@ -1184,28 +1166,31 @@ H_A:&amp; \qquad F_i \neq F_j
     <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
         <span class="n">data</span><span class="p">,</span>
         <span class="n">annot</span><span class="o">=</span><span class="n">sig_labels</span><span class="p">,</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">vmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;log(pval)&quot;</span><span class="p">]),</span>
         <span class="n">xticklabels</span><span class="o">=</span><span class="n">genotypes</span><span class="p">,</span>
         <span class="n">yticklabels</span><span class="o">=</span><span class="n">genotypes</span><span class="p">,</span>
-        <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">corrected_alpha</span><span class="p">),</span> 
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu_r&quot;</span><span class="p">,</span> <span class="n">square</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">center</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">corrected_alpha</span><span class="p">),</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu_r&quot;</span><span class="p">,</span>
+        <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">cluster_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-02-02-multigraph-clustering_29_0.png" src="_images/2022-02-02-multigraph-clustering_29_0.png" />
+<img alt="_images/2022-02-02-multigraph-clustering_28_0.png" src="_images/2022-02-02-multigraph-clustering_28_0.png" />
 </div>
 </div>
 <p>We see that for some clusters, each pair is not significant. For example, none of the pairs in cluster 10 and 11 are significantly different. However, we see certain clusters, such as cluster 5 and 8, only certain pairs of genotypes are significantly different. The * indicates a significant result.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#out = pd.concat([node_labels, cluster_label_df], axis=1)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># out = pd.concat([node_labels, cluster_label_df], axis=1)</span>
 
-<span class="c1">#out.to_csv(&quot;../outs/omni_clustering.csv&quot;, index=False)</span>
+<span class="c1"># out.to_csv(&quot;../outs/omni_clustering.csv&quot;, index=False)</span>
 </pre></div>
 </div>
 </div>
