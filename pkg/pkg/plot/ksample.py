@@ -1,3 +1,17 @@
+import numpy as np
+import matplotlib
+
+import matplotlib.pyplot as plt 
+import pandas as pd
+from matplotlib.transforms import Bbox
+import seaborn as sns
+from seaborn.utils import relative_luminance
+
+from ..utils import squareize
+
+np.seterr(all="ignore")
+
+
 def plot_heatmaps(dfs, cbar=True):
     hiers = np.unique(dfs.hierarchy_level)
     n_plots = round(len(hiers) / 2)
@@ -147,6 +161,3 @@ def plot_heatmaps(dfs, cbar=True):
         )
 
     return fig, axs
-
-
-fig, _ = plot_heatmaps(dfs, True)
