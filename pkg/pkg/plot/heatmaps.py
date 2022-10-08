@@ -8,6 +8,7 @@ import seaborn as sns
 from seaborn.utils import relative_luminance
 
 from ..utils import squareize
+from ..data import GENOTYPES
 
 np.seterr(all="ignore")
 
