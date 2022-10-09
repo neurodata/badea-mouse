@@ -1,14 +1,13 @@
-import numpy as np
 import matplotlib
-
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
-from matplotlib.transforms import Bbox
 import seaborn as sns
+from matplotlib.transforms import Bbox
 from seaborn.utils import relative_luminance
 
-from ..utils import squareize
 from ..data import GENOTYPES
+from ..utils import squareize
 
 np.seterr(all="ignore")
 
@@ -162,3 +161,166 @@ def plot_heatmaps(dfs, cbar=True):
         )
 
     return fig, axs
+
+
+def plot_pairwise(
+    pairwise_df,
+    ksample_df,
+):
+    n_plots = 3
+    width_ratios = [0.5] + [4] * n_plots
+
+    fig, axes = plt.subplots(
+        ncols=4,
+        nrows=1,
+        figsize=(n_plots * 3.25 + 1, 3.8),
+        dpi=300,
+        gridspec_kw=dict(width_ratios=width_ratios),
+        constrained_layout=True,
+        # sharey=True,
+    )
+
+    # Subscript for ease
+    cax = axes[0]
+    axs = axes[1:]
+
+    heatmap_kws = dict(
+        cmap="RdBu",
+        square=True,
+        cbar=False,
+        vmax=0,
+        vmin=np.log10(
+            pairwise_df[~pairwise_df.corrected_pvalue.isna()].corrected_pvalue
+        ).min(),
+        fmt="s",
+        center=0,
+    )
+
+    genotype_pairs = list(combinations(GENOTYPES, 2))
+
+    for idx, (genotype1, genotype2) in enumerate(genotype_pairs):
+        df = pairwise_df[
+            (pairwise_df.genotype1 == genotype1) & (pairwise_df.genotype2 == genotype2)
+        ]
+
+        k = len(np.unique(df.region1))
+
+        pvec = df.corrected_pvalue.values
+        pvals = squareize(k, pvec)
+        pvals[np.isnan(pvals)] = 1
+        plot_pvalues = np.log10(pvals)
+        if np.isinf(plot_pvalues).any():
+            print(genotype1, genotype2)
+            plot_pvalues[np.isinf(plot_pvalues)] = -150
+
+        # Labels for x y axis
+        labels = list(pd.unique(df.region1))
+
+        # make mask
+        triu_idx = np.triu_indices_from(pvals)
+        mask = np.ones((k, k))
+        mask[triu_idx] = 0
+
+        ax = axs[idx]
+        im = sns.heatmap(
+            plot_pvalues,
+            mask=mask,
+            ax=ax,
+            yticklabels=labels,
+            xticklabels=labels,
+            **heatmap_kws,
+        )
+        ax.tick_params(
+            axis="y",
+            labelrotation=0,
+            pad=0.5,
+            length=1,
+            left=False,
+        )
+
+        if idx > 0:
+            ax.set_yticklabels("")
+        ax.tick_params(
+            axis="x",
+            labelrotation=90,
+            pad=0.5,
+            length=1,
+            bottom=False,
+        )
+
+        ax.set_title(f"{genotype1} vs. {genotype2}")
+
+        # Make x's and o's
+        colors = im.get_children()[0].get_facecolors()
+        raveled_idx = np.ravel_multi_index(triu_idx, plot_pvalues.shape)
+        pad = 0.2
+        for idx, is_significant, ksample_significant in zip(
+            raveled_idx,
+            df.significant,
+            ksample_df[ksample_df.hierarchy_level == 3].significant,
+        ):
+            i, j = np.unravel_index(idx, (k, k))
+
+            # REF: seaborn heatmap
+            lum = relative_luminance(colors[idx])
+            text_color = ".15" if lum > 0.408 else "w"
+            lw = 20 / k
+
+            if ksample_significant == True:
+                if is_significant == True:
+                    xs = [j + pad, j + 1 - pad]
+                    ys = [i + pad, i + 1 - pad]
+                    ax.plot(xs, ys, color=text_color, linewidth=lw)
+                    xs = [j + 1 - pad, j + pad]
+                    ys = [i + pad, i + 1 - pad]
+                    ax.plot(xs, ys, color=text_color, linewidth=lw)
+                elif np.isnan(is_significant):
+                    circ = plt.Circle(
+                        (j + 0.5, i + 0.5),
+                        0.25,
+                        color=text_color,
+                        linewidth=lw,
+                        fill=False,
+                    )
+                    ax.add_artist(circ)
+            # elif ksample_significant == False:
+            #     triangle = RegularPolygon(
+            #         (j + 0.5, i + 0.5),
+            #         radius=.25,
+            #         numVertices=3,
+            #         color=text_color,
+            #         linewidth=lw,
+            #         fill=False,
+            #     )
+            #     ax.add_artist(triangle)
+
+        ax.invert_xaxis()
+        ax.invert_yaxis()
+
+    fig = axs[-1].get_figure()
+    _ = fig.colorbar(
+        im.get_children()[0],
+        cax=cax,
+        fraction=1,
+        shrink=10,
+        ticklocation="left",
+    )
+    cax.set_title(r"$log_{10}$" + "\ncorrected" "\np-value", pad=10)
+    cax.plot(
+        [0, 1],
+        [np.log10(0.05), np.log10(0.05)],
+        zorder=100,
+        color="black",
+        linewidth=3,
+    )
+    # cax.annotate(
+    #     r"$\alpha$",
+    #     (0.05, np.log10(0.05)),
+    #     xytext=(-20, -15),
+    #     textcoords="offset points",
+    #     va="center",
+    #     ha="right",
+    #     arrowprops={"arrowstyle": "-", "linewidth": 3, "relpos": (0, 0.5)},
+    # )
+
+    return fig, axes

@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 from graspologic.utils import symmetrize
 
-
 DATA_DIR = Path(Path(__file__).absolute().parents[3]) / "data"
 
 GENOTYPES = [

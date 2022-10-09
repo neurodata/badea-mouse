@@ -1,13 +1,12 @@
 from typing import Optional, cast
 
 import graspologic as gp
+import numpy as np
 from graspologic.align import OrthogonalProcrustes
 from graspologic.embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from graspologic.simulations import rdpg
 from graspologic.utils import is_symmetric
 from joblib import Parallel, delayed
-
-import numpy as np
 
 
 def vertex_position_test(

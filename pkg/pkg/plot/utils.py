@@ -1,6 +1,5 @@
 import matplotlib
 import matplotlib.pyplot as plt
-
 from matplotlib.transforms import Bbox
 
 
@@ -17,7 +16,6 @@ def full_extent(ax, pad=0.0):
     bbox = Bbox.union([item.get_window_extent() for item in items])
 
     return bbox.expanded(1.0 + pad, 1.0 + pad)
-
 
     # Save just the portion _inside_ the second axis's boundaries
     # extent = full_extent(ax[4]).transformed(fig.dpi_scale_trans.inverted())
