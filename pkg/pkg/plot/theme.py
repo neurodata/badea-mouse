@@ -2,6 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 def set_theme(
     theme=None,
     spine_right=False,
