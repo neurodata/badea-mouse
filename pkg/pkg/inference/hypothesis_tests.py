@@ -49,7 +49,7 @@ def run_ksample(
         if absolute:
             to_test = [np.abs(t) for t in to_test]
 
-        if to_test[0].size <= 3:
+        if to_test[0].size < 3:
             res = [np.nan, np.nan]
         else:
             if test.lower() == "dcorr":
@@ -100,7 +100,7 @@ def run_pairwise(
             if absolute:
                 to_test = [np.abs(t) for t in to_test]
 
-            if to_test[0].size <= 3:
+            if to_test[0].size < 3:
                 res = [np.nan, np.nan]
             else:
                 if test.lower() == "dcorr":

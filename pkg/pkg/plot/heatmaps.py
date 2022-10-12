@@ -36,17 +36,18 @@ def plot_heatmaps(dfs, cbar=True):
     cax = fig.add_subplot(gs[:, 0])
 
     # cax = axs[0]
+    minimum = np.log10(dfs[(~dfs.corrected_pvalue.isna()) & (dfs.corrected_pvalue > 0)].corrected_pvalue).min()
 
     heatmap_kws = dict(
         cmap="RdBu",
         square=True,
         cbar=False,
         vmax=1,
-        vmin=-150,
+        vmin=minimum,
         fmt="s",
         center=0,
     )
-
+    
     for idx, hier in enumerate(hiers):
         df = dfs[dfs.hierarchy_level == hier]
 
@@ -191,9 +192,7 @@ def plot_pairwise(
         square=True,
         cbar=False,
         vmax=0,
-        vmin=np.log10(
-            pairwise_df[~pairwise_df.corrected_pvalue.isna()].corrected_pvalue
-        ).min(),
+        vmin=np.log10(pairwise_df[(~pairwise_df.corrected_pvalue.isna()) & (pairwise_df.corrected_pvalue > 0)].corrected_pvalue).min(),
         fmt="s",
         center=0,
     )
@@ -210,9 +209,9 @@ def plot_pairwise(
         pvec = df.corrected_pvalue.values
         pvals = squareize(k, pvec)
         pvals[np.isnan(pvals)] = 1
+        pvals[pvals==0] = pvals[pvals > 0].min()
         plot_pvalues = np.log10(pvals)
         if np.isinf(plot_pvalues).any():
-            print(genotype1, genotype2)
             plot_pvalues[np.isinf(plot_pvalues)] = -150
 
         # Labels for x y axis
