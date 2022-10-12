@@ -447,10 +447,6 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">hyppo.ksample</span> <span class="kn">import</span> <span class="n">MANOVA</span><span class="p">,</span> <span class="n">KSample</span>
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">RegularPolygon</span>
 <span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Bbox</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">kruskal</span><span class="p">,</span> <span class="n">mannwhitneyu</span><span class="p">,</span> <span class="n">wilcoxon</span>
-<span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
-<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
-
 <span class="kn">from</span> <span class="nn">pkg.data</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">GENOTYPES</span><span class="p">,</span>
     <span class="n">HEMISPHERES</span><span class="p">,</span>
@@ -461,8 +457,12 @@ title="Print to PDF"
     <span class="n">load_vertex_metadata</span><span class="p">,</span>
     <span class="n">load_volume_corr</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pkg.inference</span> <span class="kn">import</span> <span class="n">run_ksample</span><span class="p">,</span> <span class="n">run_pairwise</span>
 <span class="kn">from</span> <span class="nn">pkg.plot</span> <span class="kn">import</span> <span class="n">plot_heatmaps</span><span class="p">,</span> <span class="n">plot_pairwise</span>
 <span class="kn">from</span> <span class="nn">pkg.utils</span> <span class="kn">import</span> <span class="n">squareize</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">kruskal</span><span class="p">,</span> <span class="n">mannwhitneyu</span><span class="p">,</span> <span class="n">wilcoxon</span>
+<span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
 
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;monospace&quot;</span>
 </pre></div>
@@ -531,78 +531,6 @@ title="Print to PDF"
 </section>
 <section id="try-apriori-community">
 <h2>Try apriori community<a class="headerlink" href="#try-apriori-community" title="Permalink to this headline">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">group_labels</span><span class="p">(</span>
-    <span class="n">vertex_labels</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="n">uniques</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">vertex_labels</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">combinations_with_replacement</span><span class="p">(</span><span class="n">uniques</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-        <span class="n">rdx</span> <span class="o">=</span> <span class="n">vertex_labels</span> <span class="o">==</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">cdx</span> <span class="o">=</span> <span class="n">vertex_labels</span> <span class="o">==</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">pair</span><span class="p">,</span> <span class="p">(</span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span><span class="p">)],</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">out</span>
-
-
-<span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span>
-    <span class="n">graphs</span><span class="p">,</span> <span class="n">vertex_labels</span><span class="p">,</span> <span class="n">hierarchy_level</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;kruskal&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    hierarchy_level : int</span>
-<span class="sd">        0 is top level, 1 is next, etc</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_graphs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
-
-    <span class="n">pairs</span> <span class="o">=</span> <span class="n">group_labels</span><span class="p">(</span><span class="n">vertex_labels</span><span class="p">)</span>
-
-    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">pair</span><span class="p">,</span> <span class="p">(</span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
-        <span class="n">num_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">rdx</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">cdx</span><span class="o">.</span><span class="n">sum</span><span class="p">()])</span>
-        <span class="n">triu_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">num_verts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rdx</span> <span class="o">==</span> <span class="n">cdx</span><span class="p">):</span>  <span class="c1"># deal with off diagonal blocks</span>
-            <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># when main diagonal block, only use upper triangle</span>
-            <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">][</span><span class="n">triu_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
-            <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">to_test</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">to_test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">,</span> <span class="n">workers</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kruskal&quot;</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">kruskal</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;manova&quot;</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">MANOVA</span><span class="p">()</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
-        <span class="c1"># res = tester(*[np.abs(i) for i in to_test])</span>
-        <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-
-        <span class="n">to_append</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">pair</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">hierarchy_level</span><span class="p">]</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_append</span><span class="p">)</span>
-
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">,</span> <span class="s2">&quot;statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;hierarchy_level&quot;</span><span class="p">]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-
-    <span class="n">non_nan</span> <span class="o">=</span> <span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">pvalue</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
-    <span class="n">is_sig</span><span class="p">,</span> <span class="n">corrected_pvalues</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">non_nan</span><span class="p">]</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_sig</span>
-
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vertex_hemispheres</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">Hemisphere</span><span class="o">.</span><span class="n">values</span>
@@ -613,7 +541,7 @@ title="Print to PDF"
 <span class="p">)</span><span class="o">.</span><span class="n">values</span>
 
 <span class="n">volume_ksample</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">run_test</span><span class="p">(</span><span class="n">volume_correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;manova&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">run_ksample</span><span class="p">(</span><span class="n">volume_correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;manova&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">vertex_hemispheres</span><span class="p">,</span>
@@ -643,7 +571,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-09-09-volume-correlation-analysis_10_0.png" src="_images/2022-09-09-volume-correlation-analysis_10_0.png" />
+<img alt="_images/2022-09-09-volume-correlation-analysis_9_0.png" src="_images/2022-09-09-volume-correlation-analysis_9_0.png" />
 </div>
 </div>
 </section>
@@ -654,7 +582,7 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fa_correlations</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">load_fa_corr</span><span class="p">()</span>
 
 <span class="n">fa_ksample</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">run_test</span><span class="p">(</span><span class="n">fa_correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;manova&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">run_ksample</span><span class="p">(</span><span class="n">fa_correlations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;manova&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">vertex_hemispheres</span><span class="p">,</span>
@@ -680,7 +608,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2022-09-09-volume-correlation-analysis_13_0.png" src="_images/2022-09-09-volume-correlation-analysis_13_0.png" />
+<img alt="_images/2022-09-09-volume-correlation-analysis_12_0.png" src="_images/2022-09-09-volume-correlation-analysis_12_0.png" />
 </div>
 </div>
 </section>
@@ -696,63 +624,6 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 \end{align*}</p>
 <p>The interpretation of a <span class="math notranslate nohighlight">\(p\)</span>-value less than the cutoff threshold <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> (after Bonferroni-Holm adjustment) for a given pair of classes <span class="math notranslate nohighlight">\((y, y')\)</span> at a given community pair <span class="math notranslate nohighlight">\((k, l)\)</span> is that the data does not support the null hypothesis, that the community pairing shares an equal distribution between the indicated pair of classes. A sufficient test for this context (univariate data, assumed to be independent, paired) is the Wilcoxon Signed-Rank Test, which can be performed using <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
 <p>The outcomes (p-values) can be visualized as pairs of heatmaps between a given pair of classes. Further, since the edges are undirected, we can ignore the off-diagonals of the matrix. These outcomes are then ranked, where a large rank indicates the smaller p-values.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_pairwise</span><span class="p">(</span>
-    <span class="n">graphs</span><span class="p">,</span> <span class="n">graph_labels</span><span class="p">,</span> <span class="n">vertex_labels</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s2">&quot;wilcoxon&quot;</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span>
-<span class="p">):</span>
-    <span class="n">num_graphs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
-    <span class="n">pairs</span> <span class="o">=</span> <span class="n">group_labels</span><span class="p">(</span><span class="n">vertex_labels</span><span class="p">)</span>
-
-    <span class="n">graph_pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
-
-    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">graph1</span><span class="p">,</span> <span class="n">graph2</span> <span class="ow">in</span> <span class="n">graph_pairs</span><span class="p">:</span>
-        <span class="n">gs</span> <span class="o">=</span> <span class="p">[</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph1</span><span class="p">],</span> <span class="n">graphs</span><span class="p">[</span><span class="n">graph2</span><span class="p">]]</span>
-
-        <span class="k">for</span> <span class="n">pair</span><span class="p">,</span> <span class="p">(</span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
-            <span class="n">num_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">rdx</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">cdx</span><span class="o">.</span><span class="n">sum</span><span class="p">()])</span>
-            <span class="n">triu_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">num_verts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rdx</span> <span class="o">==</span> <span class="n">cdx</span><span class="p">):</span>  <span class="c1"># deal with off diagonal blocks</span>
-                <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gs</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># when main diagonal block, only use upper triangle</span>
-                <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">rdx</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">cdx</span><span class="p">][</span><span class="n">triu_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gs</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
-                <span class="n">to_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">to_test</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">to_test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">:</span>
-                    <span class="n">res</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
-                        <span class="o">*</span><span class="n">to_test</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">,</span> <span class="n">workers</span><span class="o">=-</span><span class="mi">1</span>
-                    <span class="p">)</span>
-                <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;wilcoxon&quot;</span><span class="p">:</span>
-                    <span class="n">res</span> <span class="o">=</span> <span class="n">wilcoxon</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">test</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mannwhitney&quot;</span><span class="p">:</span>
-                    <span class="n">res</span> <span class="o">=</span> <span class="n">mannwhitneyu</span><span class="p">(</span><span class="o">*</span><span class="n">to_test</span><span class="p">)</span>
-            <span class="c1"># res = tester(*[np.abs(i) for i in to_test])</span>
-            <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-
-            <span class="n">to_append</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">pair</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">graph_labels</span><span class="p">[</span><span class="n">graph1</span><span class="p">],</span> <span class="n">graph_labels</span><span class="p">[</span><span class="n">graph2</span><span class="p">]]</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_append</span><span class="p">)</span>
-
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">,</span> <span class="s2">&quot;statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;genotype1&quot;</span><span class="p">,</span> <span class="s2">&quot;genotype2&quot;</span><span class="p">]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-
-    <span class="n">non_nan</span> <span class="o">=</span> <span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">pvalue</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
-    <span class="n">is_sig</span><span class="p">,</span> <span class="n">corrected_pvalues</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">non_nan</span><span class="p">]</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">non_nan</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_sig</span>
-
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">volume_pairwise</span> <span class="o">=</span> <span class="n">run_pairwise</span><span class="p">(</span>
@@ -772,6 +643,9 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;./figures/apriori_pairwise_volume.pdf&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2022-09-09-volume-correlation-analysis_15_0.png" src="_images/2022-09-09-volume-correlation-analysis_15_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -794,6 +668,9 @@ H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;./figures/apriori_pairwise_fa.pdf&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2022-09-09-volume-correlation-analysis_17_0.png" src="_images/2022-09-09-volume-correlation-analysis_17_0.png" />
 </div>
 </div>
 </section>
