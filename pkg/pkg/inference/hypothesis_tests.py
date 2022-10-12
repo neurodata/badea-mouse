@@ -106,14 +106,17 @@ def run_pairwise(
             if to_test[0].size < 3:
                 res = [np.nan, np.nan]
             else:
-                if test.lower() == "dcorr":
-                    res = KSample("Dcorr").test(
-                        *to_test, auto=False, reps=reps, workers=-1
-                    )
-                elif test.lower() == "wilcoxon":
-                    res = wilcoxon(*to_test)
-                elif test.lower() == "mannwhitney":
-                    res = mannwhitneyu(*to_test)
+                try:
+                    if test.lower() == "dcorr":
+                        res = KSample("Dcorr").test(
+                            *to_test, auto=False, reps=reps, workers=-1
+                        )
+                    elif test.lower() == "wilcoxon":
+                        res = wilcoxon(*to_test)
+                    elif test.lower() == "mannwhitney":
+                        res = mannwhitneyu(*to_test)
+                except:
+                    res = [np.nan, np.nan]
             # res = tester(*[np.abs(i) for i in to_test])
             stat, pval = res[:2]
 

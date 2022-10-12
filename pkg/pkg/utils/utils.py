@@ -45,3 +45,18 @@ def threshold(arrs, steps=0.01):
             return binarized
         else:
             continue
+            
+def threshold2(arrs, steps=0.01):
+    """Finds the highest quantile value in which all the arrays are connected"""
+    thresholded = []
+    for arr in arrs:
+        for percent in np.linspace(0, 1, int(1 / steps) + 1)[1:]:
+            percentile = np.quantile(np.abs(arr), 1 - percent)
+            s = arr.copy()
+            s[np.abs(s) < percentile] = 0
+
+            if nx.is_connected(nx.from_numpy_array(s)):
+                thresholded.append(s)
+                break
+
+    return thresholded
