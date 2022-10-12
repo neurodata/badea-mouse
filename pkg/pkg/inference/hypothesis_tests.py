@@ -52,12 +52,15 @@ def run_ksample(
         if to_test[0].size < 3:
             res = [np.nan, np.nan]
         else:
-            if test.lower() == "dcorr":
-                res = KSample("Dcorr").test(*to_test, auto=False, reps=reps, workers=-1)
-            elif test.lower() == "kruskal":
-                res = kruskal(*to_test)
-            elif test.lower() == "manova":
-                res = MANOVA().test(*to_test)
+            try:
+                if test.lower() == "dcorr":
+                    res = KSample("Dcorr").test(*to_test, auto=False, reps=reps, workers=-1)
+                elif test.lower() == "kruskal":
+                    res = kruskal(*to_test)
+                elif test.lower() == "manova":
+                    res = MANOVA().test(*to_test)
+            except:
+                res = [np.nan, np.nan]
         # res = tester(*[np.abs(i) for i in to_test])
         stat, pval = res[:2]
 
