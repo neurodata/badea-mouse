@@ -11,3 +11,5 @@ parts:
       - file: 2022-02-18-multigraph-clustering-mase
       - file: 2022-03-15-multimodal-clustering
       - file: 2022-08-20-label-cmp
+      - file: 2022-11-17-volume-correlation-analysis-ranked
+      - file: 2022-11-18-multigraph-clustering
