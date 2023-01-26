@@ -57,7 +57,10 @@ def run_ksample(
             elif test.lower() == "kruskal":
                 res = kruskal(*to_test)
             elif test.lower() == "manova":
-                res = MANOVA().test(*to_test)
+                try:
+                    res = MANOVA().test(*to_test)
+                except:
+                    res = [0, 1]
         # res = tester(*[np.abs(i) for i in to_test])
         stat, pval = res[:2]
 
