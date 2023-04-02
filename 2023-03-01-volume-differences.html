@@ -722,13 +722,19 @@ where the null is that there is no differences in the distribution of  distances
 </table>
 </div></div></div>
 </div>
-<p>The total number of significant pairs of regions are 713.</p>
-<div class="cell docutils container">
+<p>The total number of significant pairs of regions are 713 out of 54946 pairs.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span><span class="o">.</span><span class="n">significant</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>713
 </pre></div>
@@ -747,7 +753,12 @@ H_A:&amp; \exists F_{D^{(k)}_{i}} \neq F_{D^{(l)}_{i}}
 \)</span>$
 where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
 <p>This approach contrasts from the prior approach in Edge-wise analysis in that for each comparison, we are using all of the information given by a particular region of the brain. This allows for more reliable results because it allows for interation between all of the regions in a single comparison.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span>
     <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">apoe2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe3</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe4</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
@@ -756,8 +767,14 @@ where the null is that there is no differences in the distribution of distances,
 </pre></div>
 </div>
 </div>
+</details>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
 
@@ -771,8 +788,14 @@ where the null is that there is no differences in the distribution of distances,
 </pre></div>
 </div>
 </div>
+</details>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span> <span class="o">=</span> <span class="n">region_df</span><span class="p">[[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]]</span>
 
@@ -785,6 +808,7 @@ where the null is that there is no differences in the distribution of distances,
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <p>Here we list out the top 10 regions that are significantly different with the largest test statistic.</p>
 <div class="cell docutils container">
@@ -904,13 +928,19 @@ where the null is that there is no differences in the distribution of distances,
 </table>
 </div></div></div>
 </div>
-<p>The total number of significant regions is 259 out of 332.</p>
-<div class="cell docutils container">
+<p>The total number of significant regions is 259 out of 332 regions.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">region_df</span><span class="o">.</span><span class="n">significant</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>259
 </pre></div>
