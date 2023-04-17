@@ -437,11 +437,11 @@ document.write(`
 </div>
 </details>
 </div>
-<div class="cell tag_hide-input docutils container">
+<div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vertex_df</span> <span class="o">=</span> <span class="n">load_vertex_df</span><span class="p">()</span>
@@ -538,19 +538,17 @@ document.write(`
 </section>
 <section id="edge-wise-analysis-of-distances">
 <h2>Edge-wise analysis of distances<a class="headerlink" href="#edge-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
-<p>Here, we examine if the distances of a particular pairs of the brain are different among the genoptyes. Let <span class="math notranslate nohighlight">\(D^{(k)}_{ij}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i,j\)</span> indexing a particular element in the distance matrix. Here, we will test if the distributions of the differences between each pair of brain regions are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i,j\)</span> pair of brain regions we test:
-$<span class="math notranslate nohighlight">\(
-\begin{align*}
-H_0:&amp; F_{D^{(APOE2)}_{ij}} = F_{D^{(APOE3)}_{ij}} = F_{D^{(APOE4)}_{ij}}\\
-H_A:&amp; \exists F_{D^{(k)}_{ij}} \neq F_{D^{(l)}_{ij}}
-\end{align*}
-\)</span>$
-where the null is that there is no differences in the distribution of  distances of brain regions, while the altnate is that there exists at least one pair of genotype is different.</p>
-<div class="cell tag_hide-input docutils container">
+<p>Here, we examine if the distances of a particular pairs of the brain are different among the genoptyes. Let <span class="math notranslate nohighlight">\(D^{(k)}_{ij}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i,j\)</span> indexing a particular element in the distance matrix. Here, we will test if the distributions of the differences between each pair of brain regions are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i,j\)</span> pair of brain regions we test:</p>
+<p>\begin{align*}
+H_0:&amp; F_{D^{(APOE2)}<em>{ij}} = F</em>{D^{(APOE3)}<em>{ij}} = F</em>{D^{(APOE4)}<em>{ij}}\
+H_A:&amp; \exists F</em>{D^{(k)}<em>{ij}} \neq F</em>{D^{(l)}_{ij}}
+\end{align*}</p>
+<p>where the null is that there is no differences in the distribution of  distances of brain regions, while the altnate is that there exists at least one pair of genotype is different.</p>
+<div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">vol_dists</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -576,11 +574,11 @@ where the null is that there is no differences in the distribution of  distances
 </div>
 </details>
 </div>
-<div class="cell tag_hide-input docutils container">
+<div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
@@ -613,12 +611,139 @@ where the null is that there is no differences in the distribution of  distances
 </details>
 </div>
 <p>Here we list out the top 10 pairs of regions that are significantly different with the largest test statistic.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>stat</th>
+      <th>pvalue</th>
+      <th>corrected_pvalue</th>
+      <th>significant</th>
+      <th>region1</th>
+      <th>region2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>33434</th>
+      <td>0.501310</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Lateral_Olfactory_Tract</td>
+      <td>L-Medial_Lemniscus</td>
+    </tr>
+    <tr>
+      <th>33418</th>
+      <td>0.452451</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Lateral_Olfactory_Tract</td>
+      <td>L-Ventral_Hippocampal_Commissure</td>
+    </tr>
+    <tr>
+      <th>50236</th>
+      <td>0.429288</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>R-Periaquaductal_Grey</td>
+      <td>R-Pontine_Reticular_Nucleus</td>
+    </tr>
+    <tr>
+      <th>18976</th>
+      <td>0.411637</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Striatum</td>
+      <td>L-Spinocerebellar_Tract</td>
+    </tr>
+    <tr>
+      <th>19148</th>
+      <td>0.408775</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Striatum</td>
+      <td>R-Cerebellar_White_Matter</td>
+    </tr>
+    <tr>
+      <th>33600</th>
+      <td>0.400340</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Lateral_Olfactory_Tract</td>
+      <td>R-Medial_Lemniscus</td>
+    </tr>
+    <tr>
+      <th>33584</th>
+      <td>0.396358</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Lateral_Olfactory_Tract</td>
+      <td>R-Ventral_Hippocampal_Commissure</td>
+    </tr>
+    <tr>
+      <th>15679</th>
+      <td>0.396218</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Dorsal_Tenia_Tecta</td>
+      <td>L-Ventral_Hippocampal_Commissure</td>
+    </tr>
+    <tr>
+      <th>33711</th>
+      <td>0.391122</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Ventral_Hippocampal_Commissure</td>
+      <td>R-Claustrum</td>
+    </tr>
+    <tr>
+      <th>15845</th>
+      <td>0.388886</td>
+      <td>0.0001</td>
+      <td>0.021213</td>
+      <td>True</td>
+      <td>L-Dorsal_Tenia_Tecta</td>
+      <td>R-Ventral_Hippocampal_Commissure</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>The total number of significant pairs of regions are 713 out of 54946 pairs.</p>
 <div class="cell tag_hide-input docutils container">
@@ -633,18 +758,21 @@ where the null is that there is no differences in the distribution of  distances
 </div>
 </div>
 </details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>713
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="vertex-wise-analysis-of-distances">
 <h2>Vertex-wise analysis of distances<a class="headerlink" href="#vertex-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
-<p>Here we examine if the distances of brain volumes are different on a region basis. That is, we test if all the pairwise differences in brain volumes corresponding to a particular regions are significantly different. Let <span class="math notranslate nohighlight">\(D^{(k)}_{i}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i\)</span> indexing a particular <strong>row</strong> of the distance matrix. Here, we will test if the distributions of the distances corresponding to a particular brain region are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i\)</span>  brain region we test:
-$<span class="math notranslate nohighlight">\(
-\begin{align*}
-H_0:&amp; F_{D^{(APOE2)}_{i}} = F_{D^{(APOE3)}_{i}} = F_{D^{(APOE4)}_{i}}\\
-H_A:&amp; \exists F_{D^{(k)}_{i}} \neq F_{D^{(l)}_{i}}
-\end{align*}
-\)</span>$
-where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
+<p>Here we examine if the distances of brain volumes are different on a region basis. That is, we test if all the pairwise differences in brain volumes corresponding to a particular regions are significantly different. Let <span class="math notranslate nohighlight">\(D^{(k)}_{i}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i\)</span> indexing a particular <strong>row</strong> of the distance matrix. Here, we will test if the distributions of the distances corresponding to a particular brain region are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i\)</span>  brain region we test:</p>
+<p>\begin{align*}
+H_0:&amp; F_{D^{(APOE2)}<em>{i}} = F</em>{D^{(APOE3)}<em>{i}} = F</em>{D^{(APOE4)}<em>{i}}\
+H_A:&amp; \exists F</em>{D^{(k)}<em>{i}} \neq F</em>{D^{(l)}_{i}}
+\end{align*}</p>
+<p>where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
 <p>This approach contrasts from the prior approach in Edge-wise analysis in that for each comparison, we are using all of the information given by a particular region of the brain. This allows for more reliable results because it allows for interation between all of the regions in a single comparison.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -682,12 +810,128 @@ where the null is that there is no differences in the distribution of distances,
 </details>
 </div>
 <p>Here we list out the top 10 regions that are significantly different with the largest test statistic.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>stat</th>
+      <th>pvalue</th>
+      <th>corrected_pvalue</th>
+      <th>significant</th>
+      <th>region</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>63</th>
+      <td>0.330623</td>
+      <td>0.000249</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>L-Striatum</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td>0.189688</td>
+      <td>0.001658</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Cerebellar_Cortex</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>0.177294</td>
+      <td>0.001907</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>L-Primary_Motor_Cortex</td>
+    </tr>
+    <tr>
+      <th>168</th>
+      <td>0.138262</td>
+      <td>0.002073</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Cingulate_Cortex_Area_24b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.145418</td>
+      <td>0.002653</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>L-Cingulate_Cortex_Area_24b</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.139471</td>
+      <td>0.002819</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>L-Primary_Somatosensory_Cortex_Jaw_Region</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>0.140740</td>
+      <td>0.003068</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Primary_Somatosensory_Cortex_Upper_Lip_Region</td>
+    </tr>
+    <tr>
+      <th>209</th>
+      <td>0.134273</td>
+      <td>0.003565</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Dorsolateral_Entorhinal_Cortex</td>
+    </tr>
+    <tr>
+      <th>234</th>
+      <td>0.131458</td>
+      <td>0.003565</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Periaquaductal_Grey</td>
+    </tr>
+    <tr>
+      <th>246</th>
+      <td>0.155338</td>
+      <td>0.003980</td>
+      <td>0.049952</td>
+      <td>True</td>
+      <td>R-Superior_Colliculus</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>The total number of significant regions is 259 out of 332 regions.</p>
 <div class="cell tag_hide-input docutils container">
@@ -702,6 +946,11 @@ where the null is that there is no differences in the distribution of distances,
 </div>
 </div>
 </details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>259
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 </section>
