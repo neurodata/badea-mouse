@@ -171,6 +171,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="2022-11-18-multigraph-clustering.html">Hierarchical Clustering Analysis - Omnibus Embedding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2023-01-10-nonpar.html">K-sample latent position distribution test</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparisons of differences in brain regions</a></li>
+
+
 </ul>
 
     </div>
@@ -364,11 +366,27 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparisons of differences in brain regions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-average-differences-between-regions">Visualize the average differences between regions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-abolute-differences-in-genotypes">Visualize the abolute differences in genotypes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-wise-analysis-of-distances">Edge-wise analysis of distances</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertex-wise-analysis-of-distances">Vertex-wise analysis of distances</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparisons-of-differences-in-fractional-anisotropy">Comparisons of differences in fractional anisotropy</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Visualize the average differences between regions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Visualize the abolute differences in genotypes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Edge-wise analysis of distances</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Vertex-wise analysis of distances</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-results-from-volume-distances-and-fa-distances">Comparing the results from volume distances and FA distances</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-wise-analysis-of-results">Edge-wise analysis of results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertex-wise-analysis-of-results">Vertex wise analysis of results</a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -407,6 +425,7 @@ document.write(`
     <span class="n">HEMISPHERES</span><span class="p">,</span>
     <span class="n">SUB_STRUCTURES</span><span class="p">,</span>
     <span class="n">SUPER_STRUCTURES</span><span class="p">,</span>
+    <span class="n">load_fa</span><span class="p">,</span>
     <span class="n">load_fa_corr</span><span class="p">,</span>
     <span class="n">load_vertex_df</span><span class="p">,</span>
     <span class="n">load_vertex_metadata</span><span class="p">,</span>
@@ -542,7 +561,7 @@ where the null is that there is no differences in the distribution of  distances
 <span class="n">apoe4</span> <span class="o">=</span> <span class="n">vol_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;APOE44&quot;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="n">auto</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span>
@@ -587,7 +606,7 @@ where the null is that there is no differences in the distribution of  distances
 <span class="n">edge_df</span> <span class="o">=</span> <span class="n">edge_df</span><span class="p">[</span>
     <span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">]</span>
 <span class="p">]</span>
-<span class="n">edge_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/edge_df.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">edge_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/volume_edge.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -600,6 +619,274 @@ where the null is that there is no differences in the distribution of  distances
 </pre></div>
 </div>
 </div>
+</div>
+<p>The total number of significant pairs of regions are 713 out of 54946 pairs.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span><span class="o">.</span><span class="n">significant</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="vertex-wise-analysis-of-distances">
+<h2>Vertex-wise analysis of distances<a class="headerlink" href="#vertex-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
+<p>Here we examine if the distances of brain volumes are different on a region basis. That is, we test if all the pairwise differences in brain volumes corresponding to a particular regions are significantly different. Let <span class="math notranslate nohighlight">\(D^{(k)}_{i}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i\)</span> indexing a particular <strong>row</strong> of the distance matrix. Here, we will test if the distributions of the distances corresponding to a particular brain region are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i\)</span>  brain region we test:
+$<span class="math notranslate nohighlight">\(
+\begin{align*}
+H_0:&amp; F_{D^{(APOE2)}_{i}} = F_{D^{(APOE3)}_{i}} = F_{D^{(APOE4)}_{i}}\\
+H_A:&amp; \exists F_{D^{(k)}_{i}} \neq F_{D^{(l)}_{i}}
+\end{align*}
+\)</span>$
+where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
+<p>This approach contrasts from the prior approach in Edge-wise analysis in that for each comparison, we are using all of the information given by a particular region of the brain. This allows for more reliable results because it allows for interation between all of the regions in a single comparison.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span>
+    <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">apoe2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe3</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe4</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">apoe2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="p">)</span>
+
+<span class="n">region_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
+
+<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">apoe2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">region_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">vertex_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">loc</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;Structure&quot;</span><span class="p">]]</span>
+
+    <span class="n">region_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">region_df</span> <span class="o">=</span> <span class="n">region_df</span><span class="p">[[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]]</span>
+
+<span class="n">significant</span><span class="p">,</span> <span class="n">corrected_pvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">region_df</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
+
+<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalue</span>
+<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">significant</span>
+
+<span class="n">region_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/volume_vertex.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Here we list out the top 10 regions that are significantly different with the largest test statistic.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The total number of significant regions is 259 out of 332 regions.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">region_df</span><span class="o">.</span><span class="n">significant</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="comparisons-of-differences-in-fractional-anisotropy">
+<h1>Comparisons of differences in fractional anisotropy<a class="headerlink" href="#comparisons-of-differences-in-fractional-anisotropy" title="Permalink to this heading">#</a></h1>
+<p>In these sections, we test for fractional anisotropy instead of brain volumes</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vertex_df</span> <span class="o">=</span> <span class="n">load_vertex_df</span><span class="p">()</span>
+<span class="n">fas</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">load_fa</span><span class="p">()</span>
+
+<span class="c1"># normalize volumes</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">fas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="n">fas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">unique_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># make distance matrices</span>
+<span class="n">fa_dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">squareform</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fas</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<section id="id1">
+<h2>Visualize the average differences between regions<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<p>We first visualize the mean distance matrix separated by genotypes. We do not observe specific patterns among the genotypes.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="n">fa_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)]</span>
+
+<span class="c1">## plot the mean differences per genotype</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">fa_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">adjplot</span><span class="p">(</span>
+        <span class="n">means</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+        <span class="c1"># meta=vertex_name,</span>
+        <span class="c1"># group=[&quot;Hemisphere_abbrev&quot;],</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/6bbe0afb5d3d1834d629f6ad60cbc68d48a8779c93a5c1858b626b8bc36b606c.png" src="_images/6bbe0afb5d3d1834d629f6ad60cbc68d48a8779c93a5c1858b626b8bc36b606c.png" />
+</div>
+</div>
+</section>
+<section id="id2">
+<h2>Visualize the abolute differences in genotypes<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<p>Here take the absolute differences in the mean distance matrices, and visualize the resulting matrix. We now see that different pairs of genotypes show distinct patterns.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## plot the absolute difference in means</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+    <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">label1</span><span class="p">]</span> <span class="o">-</span> <span class="n">means</span><span class="p">[</span><span class="n">label2</span><span class="p">])</span>
+    <span class="n">gp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">adjplot</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+        <span class="c1"># meta=vertex_name,</span>
+        <span class="c1"># group=[&quot;Hemisphere_abbrev&quot;],</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">unique_labels</span><span class="p">[</span><span class="n">label1</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">unique_labels</span><span class="p">[</span><span class="n">label2</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/d564e2d82ebb23efa528728491b50edc1786521839195e050e508c3ce8faf487.png" src="_images/d564e2d82ebb23efa528728491b50edc1786521839195e050e508c3ce8faf487.png" />
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>Edge-wise analysis of distances<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">fa_dists</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">rdx</span><span class="o">.</span><span class="n">size</span>
+
+<span class="n">apoe2</span> <span class="o">=</span> <span class="n">fa_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;APOE22&quot;</span><span class="p">]</span>
+<span class="n">apoe3</span> <span class="o">=</span> <span class="n">fa_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;APOE33&quot;</span><span class="p">]</span>
+<span class="n">apoe4</span> <span class="o">=</span> <span class="n">fa_dists</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;APOE44&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="n">auto</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span>
+
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span>
+    <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">apoe2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">apoe3</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">apoe4</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rdx</span><span class="p">,</span> <span class="n">cdx</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
+
+<span class="n">edge_df</span><span class="p">[</span><span class="s2">&quot;rdx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdx</span>
+<span class="n">edge_df</span><span class="p">[</span><span class="s2">&quot;cdx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cdx</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">edge_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">loc1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;rdx&quot;</span><span class="p">]</span>
+    <span class="n">region1</span> <span class="o">=</span> <span class="n">vertex_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">loc1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;Structure&quot;</span><span class="p">]]</span>
+
+    <span class="n">loc2</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;cdx&quot;</span><span class="p">]</span>
+    <span class="n">region2</span> <span class="o">=</span> <span class="n">vertex_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">loc2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;Structure&quot;</span><span class="p">]]</span>
+
+    <span class="n">edge_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;region1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region1</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">edge_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region2</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">significant</span><span class="p">,</span> <span class="n">corrected_pvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">edge_df</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
+
+<span class="n">edge_df</span><span class="p">[</span><span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalue</span>
+<span class="n">edge_df</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">significant</span>
+
+<span class="n">edge_df</span> <span class="o">=</span> <span class="n">edge_df</span><span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="n">edge_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/fa_edge.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -629,100 +916,99 @@ where the null is that there is no differences in the distribution of  distances
   </thead>
   <tbody>
     <tr>
-      <th>33434</th>
-      <td>0.501310</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>53084</th>
+      <td>0.512056</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Lateral_Olfactory_Tract</td>
-      <td>L-Medial_Lemniscus</td>
+      <td>R-Raphe_Nucleus</td>
+      <td>R-Spinal_Trigeminal_Nerve</td>
     </tr>
     <tr>
-      <th>33418</th>
-      <td>0.452451</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>54456</th>
+      <td>0.494586</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Lateral_Olfactory_Tract</td>
-      <td>L-Ventral_Hippocampal_Commissure</td>
-    </tr>
-    <tr>
-      <th>50236</th>
-      <td>0.429288</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
-      <td>True</td>
-      <td>R-Periaquaductal_Grey</td>
-      <td>R-Pontine_Reticular_Nucleus</td>
-    </tr>
-    <tr>
-      <th>18976</th>
-      <td>0.411637</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
-      <td>True</td>
-      <td>L-Striatum</td>
-      <td>L-Spinocerebellar_Tract</td>
-    </tr>
-    <tr>
-      <th>19148</th>
-      <td>0.408775</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
-      <td>True</td>
-      <td>L-Striatum</td>
-      <td>R-Cerebellar_White_Matter</td>
-    </tr>
-    <tr>
-      <th>33600</th>
-      <td>0.400340</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
-      <td>True</td>
-      <td>L-Lateral_Olfactory_Tract</td>
+      <td>R-Spinal_Trigeminal_Nerve</td>
       <td>R-Medial_Lemniscus</td>
     </tr>
     <tr>
-      <th>33584</th>
-      <td>0.396358</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>43300</th>
+      <td>0.472303</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Lateral_Olfactory_Tract</td>
-      <td>R-Ventral_Hippocampal_Commissure</td>
+      <td>R-Dorsolateral_Orbital_Cortex</td>
+      <td>R-Cingulate_Cortex_Area_25</td>
     </tr>
     <tr>
-      <th>15679</th>
-      <td>0.396218</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>46672</th>
+      <td>0.460022</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Dorsal_Tenia_Tecta</td>
-      <td>L-Ventral_Hippocampal_Commissure</td>
+      <td>R-Primary_Visual_Cortex_Monocular_Area</td>
+      <td>R-Cingulate_Cortex_Area_25</td>
     </tr>
     <tr>
-      <th>33711</th>
-      <td>0.391122</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>9175</th>
+      <td>0.452144</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Ventral_Hippocampal_Commissure</td>
-      <td>R-Claustrum</td>
+      <td>L-Primary_Somatosensory_Cortex_Jaw_Region</td>
+      <td>R-Cingulate_Cortex_Area_25</td>
     </tr>
     <tr>
-      <th>15845</th>
-      <td>0.388886</td>
-      <td>0.0001</td>
-      <td>0.021213</td>
+      <th>1708</th>
+      <td>0.450266</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
       <td>True</td>
-      <td>L-Dorsal_Tenia_Tecta</td>
-      <td>R-Ventral_Hippocampal_Commissure</td>
+      <td>L-Cingulate_Cortex_Area_29b</td>
+      <td>L-Anterior_Pretectal_Nucleus</td>
+    </tr>
+    <tr>
+      <th>40575</th>
+      <td>0.449442</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
+      <td>True</td>
+      <td>L-IntermediateReticularNucleus</td>
+      <td>R-Cerebrospinal_fluid</td>
+    </tr>
+    <tr>
+      <th>23417</th>
+      <td>0.442129</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
+      <td>True</td>
+      <td>L-Superior_Colliculus</td>
+      <td>R-Dorsolateral_Orbital_Cortex</td>
+    </tr>
+    <tr>
+      <th>8586</th>
+      <td>0.441193</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
+      <td>True</td>
+      <td>L-Primary_Somatosensory_Cortex_Hindlimb_Region</td>
+      <td>L-Primary_Somatosensory_Cortex_Jaw_Region</td>
+    </tr>
+    <tr>
+      <th>38139</th>
+      <td>0.436460</td>
+      <td>0.00005</td>
+      <td>0.032704</td>
+      <td>True</td>
+      <td>L-Cingulate_Cortex_Area_25</td>
+      <td>R-Dorsolateral_Orbital_Cortex</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>The total number of significant pairs of regions are 713 out of 54946 pairs.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -736,47 +1022,28 @@ where the null is that there is no differences in the distribution of  distances
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>713
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>993
 </pre></div>
 </div>
 </div>
 </div>
+<p>The total number of significant pairs of regions are 993 out of 54946 pairs.</p>
 </section>
-<section id="vertex-wise-analysis-of-distances">
-<h2>Vertex-wise analysis of distances<a class="headerlink" href="#vertex-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
-<p>Here we examine if the distances of brain volumes are different on a region basis. That is, we test if all the pairwise differences in brain volumes corresponding to a particular regions are significantly different. Let <span class="math notranslate nohighlight">\(D^{(k)}_{i}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i\)</span> indexing a particular <strong>row</strong> of the distance matrix. Here, we will test if the distributions of the distances corresponding to a particular brain region are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i\)</span>  brain region we test:
-$<span class="math notranslate nohighlight">\(
-\begin{align*}
-H_0:&amp; F_{D^{(APOE2)}_{i}} = F_{D^{(APOE3)}_{i}} = F_{D^{(APOE4)}_{i}}\\
-H_A:&amp; \exists F_{D^{(k)}_{i}} \neq F_{D^{(l)}_{i}}
-\end{align*}
-\)</span>$
-where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
-<p>This approach contrasts from the prior approach in Edge-wise analysis in that for each comparison, we are using all of the information given by a particular region of the brain. This allows for more reliable results because it allows for interation between all of the regions in a single comparison.</p>
-<div class="cell tag_hide-input docutils container">
+<section id="id4">
+<h2>Vertex-wise analysis of distances<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
+<div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span>
-    <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">apoe2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe3</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe4</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">apoe2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe3</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">apoe4</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">reps</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">apoe2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
+
+<span class="n">region_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">])</span>
 
 <span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">apoe2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
@@ -785,6 +1052,14 @@ where the null is that there is no differences in the distribution of distances,
     <span class="n">region</span> <span class="o">=</span> <span class="n">vertex_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">loc</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;Structure&quot;</span><span class="p">]]</span>
 
     <span class="n">region_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">significant</span><span class="p">,</span> <span class="n">corrected_pvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">region_df</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
+<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalue</span>
+<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">significant</span>
+
+<span class="n">region_df</span> <span class="o">=</span> <span class="n">region_df</span><span class="p">[[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]]</span>
+
+<span class="n">region_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/fa_vertex.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -797,26 +1072,11 @@ where the null is that there is no differences in the distribution of distances,
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span> <span class="o">=</span> <span class="n">region_df</span><span class="p">[[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;significant&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">]]</span>
-
-<span class="n">significant</span><span class="p">,</span> <span class="n">corrected_pvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">region_df</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdr_bh&quot;</span><span class="p">)</span>
-
-<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;corrected_pvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalue</span>
-<span class="n">region_df</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">significant</span>
-
-<span class="n">region_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../outs/region_df.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<p>Here we list out the top 10 regions that are significantly different with the largest test statistic.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">region_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -845,90 +1105,89 @@ where the null is that there is no differences in the distribution of distances,
   </thead>
   <tbody>
     <tr>
-      <th>63</th>
-      <td>0.330623</td>
-      <td>0.000249</td>
-      <td>0.049952</td>
-      <td>True</td>
-      <td>L-Striatum</td>
-    </tr>
-    <tr>
-      <th>256</th>
-      <td>0.189688</td>
-      <td>0.001658</td>
-      <td>0.049952</td>
-      <td>True</td>
-      <td>R-Cerebellar_Cortex</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>0.177294</td>
-      <td>0.001907</td>
-      <td>0.049952</td>
-      <td>True</td>
-      <td>L-Primary_Motor_Cortex</td>
-    </tr>
-    <tr>
-      <th>168</th>
-      <td>0.138262</td>
-      <td>0.002073</td>
-      <td>0.049952</td>
-      <td>True</td>
-      <td>R-Cingulate_Cortex_Area_24b</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.145418</td>
-      <td>0.002653</td>
-      <td>0.049952</td>
-      <td>True</td>
-      <td>L-Cingulate_Cortex_Area_24b</td>
-    </tr>
-    <tr>
       <th>28</th>
-      <td>0.139471</td>
-      <td>0.002819</td>
-      <td>0.049952</td>
+      <td>0.268610</td>
+      <td>0.00029</td>
+      <td>0.026892</td>
       <td>True</td>
       <td>L-Primary_Somatosensory_Cortex_Jaw_Region</td>
     </tr>
     <tr>
-      <th>197</th>
-      <td>0.140740</td>
-      <td>0.003068</td>
-      <td>0.049952</td>
+      <th>314</th>
+      <td>0.324524</td>
+      <td>0.00032</td>
+      <td>0.026892</td>
       <td>True</td>
-      <td>R-Primary_Somatosensory_Cortex_Upper_Lip_Region</td>
+      <td>R-Cingulate_Cortex_Area_25</td>
     </tr>
     <tr>
-      <th>209</th>
-      <td>0.134273</td>
-      <td>0.003565</td>
-      <td>0.049952</td>
+      <th>173</th>
+      <td>0.285267</td>
+      <td>0.00041</td>
+      <td>0.026892</td>
       <td>True</td>
-      <td>R-Dorsolateral_Entorhinal_Cortex</td>
+      <td>R-Cingulate_Cortex_Area_30</td>
     </tr>
     <tr>
-      <th>234</th>
-      <td>0.131458</td>
-      <td>0.003565</td>
-      <td>0.049952</td>
+      <th>72</th>
+      <td>0.234462</td>
+      <td>0.00047</td>
+      <td>0.026892</td>
       <td>True</td>
-      <td>R-Periaquaductal_Grey</td>
+      <td>L-Ventral_Thalamic_Nuclei</td>
     </tr>
     <tr>
-      <th>246</th>
-      <td>0.155338</td>
-      <td>0.003980</td>
-      <td>0.049952</td>
+      <th>157</th>
+      <td>0.295831</td>
+      <td>0.00059</td>
+      <td>0.026892</td>
       <td>True</td>
-      <td>R-Superior_Colliculus</td>
+      <td>L-Red_Nucleus_Magnocellular</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>0.255369</td>
+      <td>0.00063</td>
+      <td>0.026892</td>
+      <td>True</td>
+      <td>R-Primary_Visual_Cortex_Monocular_Area</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>0.228251</td>
+      <td>0.00067</td>
+      <td>0.026892</td>
+      <td>True</td>
+      <td>L-Hippocampus</td>
+    </tr>
+    <tr>
+      <th>229</th>
+      <td>0.243990</td>
+      <td>0.00072</td>
+      <td>0.026892</td>
+      <td>True</td>
+      <td>R-Striatum</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>0.283246</td>
+      <td>0.00077</td>
+      <td>0.026892</td>
+      <td>True</td>
+      <td>L-Cingulate_Cortex_Area_25</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td>0.281154</td>
+      <td>0.00081</td>
+      <td>0.026892</td>
+      <td>True</td>
+      <td>R-Raphe_Nucleus</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>The total number of significant regions is 259 out of 332 regions.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -942,7 +1201,188 @@ where the null is that there is no differences in the distribution of distances,
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>259
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>59
+</pre></div>
+</div>
+</div>
+</div>
+<p>The total number of significant regions is 59 out of 332 regions.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="comparing-the-results-from-volume-distances-and-fa-distances">
+<h1>Comparing the results from volume distances and FA distances<a class="headerlink" href="#comparing-the-results-from-volume-distances-and-fa-distances" title="Permalink to this heading">#</a></h1>
+<p>To compare the results of volume and FA edge-wise analysis, we compute two measures:</p>
+<ol class="arabic simple">
+<li><p>Kendall’s Tau, which measures the correspondence between two rankings. Values close to 1 indicate strong agreement, and values close to -1 indicate strong disagreement. We compute Kendall’s Tau of the rankings of the test statistics.</p></li>
+<li><p>Jaccard distance, which measures the distance between two boolean vectors. We compute the distance between the vectors containing whether the test was significant or not.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">jaccard</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">kendalltau</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vol_regions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../outs/volume_vertex.csv&quot;</span><span class="p">)</span>
+<span class="n">fa_regions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../outs/fa_vertex.csv&quot;</span><span class="p">)</span>
+
+<span class="n">vol_edge</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../outs/volume_edge.csv&quot;</span><span class="p">)</span>
+<span class="n">fa_edge</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../outs/fa_edge.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="edge-wise-analysis-of-results">
+<h2>Edge-wise analysis of results<a class="headerlink" href="#edge-wise-analysis-of-results" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vol_edge_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">vol_edge</span><span class="o">.</span><span class="n">stat</span><span class="p">)</span>
+<span class="n">fa_edge_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">fa_edge</span><span class="o">.</span><span class="n">stat</span><span class="p">)</span>
+
+<span class="n">kendalltau</span><span class="p">(</span><span class="n">vol_edge_idx</span><span class="p">,</span> <span class="n">fa_edge_idx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SignificanceResult(statistic=-0.0014717900860659208, pvalue=0.6048229796699123)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jaccard</span><span class="p">(</span><span class="n">fa_edge</span><span class="o">.</span><span class="n">significant</span><span class="p">,</span> <span class="n">vol_edge</span><span class="o">.</span><span class="n">significant</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9958799293702177
+</pre></div>
+</div>
+</div>
+</div>
+<p>We get Kendall’s Tau of -0.00147 and Jaccard distance of 0.996. This suggest that there is very little agreement between the test statistics and the region pairs that are significant. However, since the Jaccard’s distance is not 1, there is some agreement. In the following, we look at pairs of regions that are signifcantly different from both the volume and FA analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vol_edge_sig</span> <span class="o">=</span> <span class="n">vol_edge</span><span class="p">[</span><span class="n">vol_edge</span><span class="o">.</span><span class="n">significant</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="n">fa_edge_sig</span> <span class="o">=</span> <span class="n">fa_edge</span><span class="p">[</span><span class="n">fa_edge</span><span class="o">.</span><span class="n">significant</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">vol_edge</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vol_edge_sig</span><span class="p">,</span> <span class="n">fa_edge_sig</span><span class="p">)][[</span><span class="s2">&quot;region1&quot;</span><span class="p">,</span> <span class="s2">&quot;region2&quot;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                 region1                            region2
+4323             L-Frontal_Cortex_Area_3  L-Pontine_Reticular_NucleusCaudal
+18943                         L-Striatum                L-Tegmental_Nucleus
+18993                         L-Striatum        L-Red_Nucleus_Magnocellular
+19106                         L-Striatum                    R-Raphe_Nucleus
+29768                L-Tegmental_Nucleus             L-Posterior_Commissure
+30998  L-Pontine_Reticular_NucleusCaudal          R-Interpeduncular_Nucleus
+34821             L-Posterior_Commissure                 R-Medial_Lemniscus
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="vertex-wise-analysis-of-results">
+<h2>Vertex wise analysis of results<a class="headerlink" href="#vertex-wise-analysis-of-results" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vol_regions_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">vol_regions</span><span class="o">.</span><span class="n">stat</span><span class="p">)</span>
+<span class="n">fa_regions_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">fa_regions</span><span class="o">.</span><span class="n">stat</span><span class="p">)</span>
+
+<span class="n">kendalltau</span><span class="p">(</span><span class="n">vol_regions_idx</span><span class="p">,</span> <span class="n">fa_regions_idx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SignificanceResult(statistic=-0.007097877916499838, pvalue=0.8469772553058393)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jaccard</span><span class="p">(</span><span class="n">vol_regions</span><span class="o">.</span><span class="n">significant</span><span class="p">,</span> <span class="n">fa_regions</span><span class="o">.</span><span class="n">significant</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.8478260869565217
+</pre></div>
+</div>
+</div>
+</div>
+<p>We get Kendall’s Tau of -0.007 and Jaccard distance of 0.848. This suggest that there is very little agreement between the test statistics and the region pairs that are significant. However, since the Jaccard’s distance is not 1, there is some agreement. In the following, we look at regions that are signifcantly different from both the volume and FA analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vol_regions_sig</span> <span class="o">=</span> <span class="n">vol_regions</span><span class="p">[</span><span class="n">vol_regions</span><span class="o">.</span><span class="n">significant</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="n">fa_regions_sig</span> <span class="o">=</span> <span class="n">fa_regions</span><span class="p">[</span><span class="n">fa_regions</span><span class="o">.</span><span class="n">significant</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fa_regions</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vol_regions_sig</span><span class="p">,</span> <span class="n">fa_regions_sig</span><span class="p">)]</span><span class="o">.</span><span class="n">region</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8                             L-Cingulate_Cortex_Area_32
+13                               L-Frontal_Cortex_Area_3
+24           L-Primary_Somatosensory_Cortex_Barrel_Field
+25       L-Primary_Somatosensory_Cortex_Dysgranular_Zone
+28             L-Primary_Somatosensory_Cortex_Jaw_Region
+34                               L-Primary_Visual_Cortex
+66                 L-Bed_Nucleus_of_the_Stria_Terminalis
+68                                 L-Periaquaductal_Grey
+83                           L-Red_Nucleus_Parvicellular
+87                                L-Precuneiform_Nucleus
+98     L-Parvicellular_Reticular_Nucleus_and_Principa...
+105                         L-Trigeminal_Sensory_Nucleus
+106                                   L-Dorsal_Tegmentum
+107                                  L-Tegmental_Nucleus
+142                      L-Ventral_Spinocerebellar_Tract
+148                           L-Cingulate_Cortex_Area_25
+152                    L-Microcellular_Tegmental_Nucleus
+157                          L-Red_Nucleus_Magnocellular
+161                       L-IntermediateReticularNucleus
+168                          R-Cingulate_Cortex_Area_24b
+173                           R-Cingulate_Cortex_Area_30
+178                        R-Dorsolateral_Orbital_Cortex
+189                       R-Primary_Somatosensory_Cortex
+193       R-Primary_Somatosensory_Cortex_Hindlimb_Region
+197      R-Primary_Somatosensory_Cortex_Upper_Lip_Region
+214            R-Posterolateral_Cortical_Amygdaloid_Area
+217                                 R-Dorsal_Tenia_Tecta
+221                                       R-Presubiculum
+225                             R-Preoptic_Telencephalon
+226                                R-Subthalamic_Nucleus
+229                                           R-Striatum
+232                R-Bed_Nucleus_of_the_Stria_Terminalis
+240                          R-Medial_Geniculate_Nucleus
+242                                       R-Zona_Incerta
+246                                R-Superior_Colliculus
+256                                  R-Cerebellar_Cortex
+264    R-Parvicellular_Reticular_Nucleus_and_Principa...
+270                                      R-Raphe_Nucleus
+283                                 R-Anterior_Commisure
+300                            R-Spinal_Trigeminal_Nerve
+307                                   R-Medial_Lemniscus
+314                           R-Cingulate_Cortex_Area_25
+Name: region, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vol_regions_sig</span><span class="p">,</span> <span class="n">fa_regions_sig</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>42
 </pre></div>
 </div>
 </div>
@@ -1008,11 +1448,27 @@ where the null is that there is no differences in the distribution of distances,
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparisons of differences in brain regions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-average-differences-between-regions">Visualize the average differences between regions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-abolute-differences-in-genotypes">Visualize the abolute differences in genotypes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-wise-analysis-of-distances">Edge-wise analysis of distances</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertex-wise-analysis-of-distances">Vertex-wise analysis of distances</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparisons-of-differences-in-fractional-anisotropy">Comparisons of differences in fractional anisotropy</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Visualize the average differences between regions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Visualize the abolute differences in genotypes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Edge-wise analysis of distances</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Vertex-wise analysis of distances</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-results-from-volume-distances-and-fa-distances">Comparing the results from volume distances and FA distances</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-wise-analysis-of-results">Edge-wise analysis of results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertex-wise-analysis-of-results">Vertex wise analysis of results</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
