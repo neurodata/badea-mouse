@@ -539,10 +539,11 @@ document.write(`
 <section id="edge-wise-analysis-of-distances">
 <h2>Edge-wise analysis of distances<a class="headerlink" href="#edge-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
 <p>Here, we examine if the distances of a particular pairs of the brain are different among the genoptyes. Let <span class="math notranslate nohighlight">\(D^{(k)}_{ij}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i,j\)</span> indexing a particular element in the distance matrix. Here, we will test if the distributions of the differences between each pair of brain regions are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i,j\)</span> pair of brain regions we test:</p>
-<p>\begin{align*}
-H_0:&amp; F_{D^{(APOE2)}<em>{ij}} = F</em>{D^{(APOE3)}<em>{ij}} = F</em>{D^{(APOE4)}<em>{ij}}\
-H_A:&amp; \exists F</em>{D^{(k)}<em>{ij}} \neq F</em>{D^{(l)}_{ij}}
-\end{align*}</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+H_0:&amp; F_{D^{(APOE2)}_{ij}} = F_{D^{(APOE3)}_{ij}} = F_{D^{(APOE4)}_{ij}}\\
+H_A:&amp; \exists F_{D^{(k)}_{ij}} \neq F_{D^{(l)}_{ij}}
+\end{align*}\]</div>
 <p>where the null is that there is no differences in the distribution of  distances of brain regions, while the altnate is that there exists at least one pair of genotype is different.</p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
@@ -768,10 +769,11 @@ H_A:&amp; \exists F</em>{D^{(k)}<em>{ij}} \neq F</em>{D^{(l)}_{ij}}
 <section id="vertex-wise-analysis-of-distances">
 <h2>Vertex-wise analysis of distances<a class="headerlink" href="#vertex-wise-analysis-of-distances" title="Permalink to this heading">#</a></h2>
 <p>Here we examine if the distances of brain volumes are different on a region basis. That is, we test if all the pairwise differences in brain volumes corresponding to a particular regions are significantly different. Let <span class="math notranslate nohighlight">\(D^{(k)}_{i}\)</span> denote a <span class="math notranslate nohighlight">\(332 \times 332\)</span> distance matrix for a particular subject with genotype <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(i\)</span> indexing a particular <strong>row</strong> of the distance matrix. Here, we will test if the distributions of the distances corresponding to a particular brain region are significantly different via distance correlations. That is for each <span class="math notranslate nohighlight">\(i\)</span>  brain region we test:</p>
-<p>\begin{align*}
-H_0:&amp; F_{D^{(APOE2)}<em>{i}} = F</em>{D^{(APOE3)}<em>{i}} = F</em>{D^{(APOE4)}<em>{i}}\
-H_A:&amp; \exists F</em>{D^{(k)}<em>{i}} \neq F</em>{D^{(l)}_{i}}
-\end{align*}</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+H_0:&amp; F_{D^{(APOE2)}_{i}} = F_{D^{(APOE3)}_{i}} = F_{D^{(APOE4)}_{i}}\\
+H_A:&amp; \exists F_{D^{(k)}_{i}} \neq F_{D^{(l)}_{i}}
+\end{align*}\]</div>
 <p>where the null is that there is no differences in the distribution of distances, while the altnate is that there exists at least one pair of genotype is different.</p>
 <p>This approach contrasts from the prior approach in Edge-wise analysis in that for each comparison, we are using all of the information given by a particular region of the brain. This allows for more reliable results because it allows for interation between all of the regions in a single comparison.</p>
 <div class="cell tag_hide-input docutils container">

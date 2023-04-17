@@ -577,13 +577,15 @@ document.write(`
 <section id="statistical-experiment">
 <h2>Statistical Experiment<a class="headerlink" href="#statistical-experiment" title="Permalink to this heading">#</a></h2>
 <p>For a given pair of sub-regions (Left/Right Forebrain, Midbrain, Hindbrain, White Matter Tracts) <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(l\)</span>, do the edges incident nodes between a pair of sub-regions have the same, or a different, distribution? Formally, consider the following model. Let <span class="math notranslate nohighlight">\(a_{ij}^{(y)}\)</span> be the edge-weight for edge <span class="math notranslate nohighlight">\(i, j\)</span>, and let <span class="math notranslate nohighlight">\(z_i \in [K]\)</span> be the node label for node <span class="math notranslate nohighlight">\(i\)</span>, where <span class="math notranslate nohighlight">\(y \in \{APOE22, APOE33, APOE44\}\)</span> is the class of the network:</p>
-<p>\begin{align*}
-a_{ij}^{(y)} | z_i = k, z_j = l \overset{ind.}{\sim} F^{(y)}_{k,l}
-\end{align*}</p>
-<p>where <span class="math notranslate nohighlight">\(F^{(y)}_{k,l}\)</span> is the distribution function for the community of edges <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(l\)</span> in a network of class <span class="math notranslate nohighlight">\(y\)</span>. For a given tuple of node communities <span class="math notranslate nohighlight">\((k,l)\)</span> and <span class="math notranslate nohighlight">\((k',l')\)</span>, the hypothesis of interest is:
-\begin{align*}
-H_{0, k, l}^{(y, y’)} : F^{(y)}<em>{k,l} = F^{(y’)}</em>{k,l} \text{ against }H^{(y)}<em>{A, k,l}: F^{(y)}</em>{k,l} = F^{(y’)}_{k,l}
-\end{align*}</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    a_{ij}^{(y)} | z_i = k, z_j = l \overset{ind.}{\sim} F^{(y)}_{k,l}
+\end{align*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(F^{(y)}_{k,l}\)</span> is the distribution function for the community of edges <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(l\)</span> in a network of class <span class="math notranslate nohighlight">\(y\)</span>. For a given tuple of node communities <span class="math notranslate nohighlight">\((k,l)\)</span> and <span class="math notranslate nohighlight">\((k',l')\)</span>, the hypothesis of interest is:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    H_{0, k, l}^{(y, y')} : F^{(y)}_{k,l} = F^{(y')}_{k,l} \text{ against }H^{(y)}_{A, k,l}: F^{(y)}_{k,l} = F^{(y')}_{k,l}
+\end{align*}\]</div>
 <p>The interpretation of a <span class="math notranslate nohighlight">\(p\)</span>-value less than the cutoff threshold <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> (after Bonferroni-Holm adjustment) for a given pair of classes <span class="math notranslate nohighlight">\((y, y')\)</span> at a given community pair <span class="math notranslate nohighlight">\((k, l)\)</span> is that the data does not support the null hypothesis, that the community pairing shares an equal distribution between the indicated pair of classes. A sufficient test for this context (univariate data, assumed to be independent, paired) is the Wilcoxon Signed-Rank Test, which can be performed using <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
 <p>The outcomes (p-values) can be visualized as pairs of heatmaps between a given pair of classes. Further, since the edges are undirected, we can ignore the off-diagonals of the matrix. These outcomes are then ranked, where a large rank indicates the smaller p-values.</p>
 <div class="cell docutils container">

@@ -807,10 +807,11 @@ if (outputEl) {{
 <section id="testing-for-significantly-different-clusters-at-various-levels">
 <h2>Testing for significantly different clusters at various levels<a class="headerlink" href="#testing-for-significantly-different-clusters-at-various-levels" title="Permalink to this heading">#</a></h2>
 <p>Again, the clusters tell us which regions should be grouped together. Hence, each cluster forms our subgraph. For each subgraph, we test whether the distribution of the latent positions (aka the embeddings) are significantly different. Specifically we test</p>
-<p>\begin{align}
-H_0:&amp; \qquad F_{APOE2}=F_{APOE3}=F_{APOE4}\
+<div class="amsmath math notranslate nohighlight" id="equation-ab408c93-2c5b-49ce-aa39-8b9bddde6b28">
+<span class="eqno">()<a class="headerlink" href="#equation-ab408c93-2c5b-49ce-aa39-8b9bddde6b28" title="Permalink to this equation">#</a></span>\[\begin{align}
+H_0:&amp; \qquad F_{APOE2}=F_{APOE3}=F_{APOE4}\\
 H_A:&amp; \qquad \text{At least one pair of distributions is different}
-\end{align}</p>
+\end{align}\]</div>
 <p>using a 3-sample distance correlation. We correct for multiple hypothesis testing via Holm-Bonferroni correction.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
