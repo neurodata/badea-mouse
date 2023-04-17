@@ -15,8 +15,8 @@ from ..utils import squareize
 np.seterr(all="ignore")
 import warnings
 
-from pandas.core.common import SettingWithCopyWarning
-warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+# from pandas.core.common import SettingWithCopyWarning
+# warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
 def plot_heatmaps(dfs, cbar=True, ranked_pvalue=False, top_ranks=10):
     hiers = np.unique(dfs.hierarchy_level)
