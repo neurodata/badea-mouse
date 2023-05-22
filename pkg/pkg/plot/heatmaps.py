@@ -7,14 +7,18 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.transforms import Bbox
 from seaborn.utils import relative_luminance
+from scipy.stats import rankdata
 
 from ..data import GENOTYPES
 from ..utils import squareize
 
 np.seterr(all="ignore")
+import warnings
 
+# from pandas.core.common import SettingWithCopyWarning
+# warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
-def plot_heatmaps(dfs, cbar=True):
+def plot_heatmaps(dfs, cbar=True, ranked_pvalue=False, top_ranks=10):
     hiers = np.unique(dfs.hierarchy_level)
     n_plots = round(len(hiers) / 2)
 
@@ -36,13 +40,30 @@ def plot_heatmaps(dfs, cbar=True):
     cax = fig.add_subplot(gs[:, 0])
 
     # cax = axs[0]
-    minimum = np.log10(dfs[(~dfs.corrected_pvalue.isna()) & (dfs.corrected_pvalue > 0)].corrected_pvalue).min()
+    if ranked_pvalue:
+        # dfs.corrected_pvalue = rankdata(1 - dfs.corrected_pvalue, nan_policy='omit')
+        
+        tmp = []
+        for idx, hier in enumerate(hiers):
+            df = dfs[dfs.hierarchy_level == hier]
+            df.loc[:,'corrected_pvalue'] = rankdata(1 - df.pvalue.values, method='max', nan_policy='omit')
+            cmax = df.corrected_pvalue.max()
+            df.loc[:, 'ranked_significant'] = df.loc[:,'corrected_pvalue'] > (cmax-top_ranks)
+            tmp.append(df)
+        dfs = pd.concat(tmp, axis=0,)
+            
+        # vmax = dfs.corrected_pvalue.max()
+        vmax=None
+        minimum = 1
+    else:
+        vmax = 1
+        minimum = np.log10(dfs[(~dfs.corrected_pvalue.isna()) & (dfs.corrected_pvalue > 0)].corrected_pvalue).min()
 
     heatmap_kws = dict(
         cmap="RdBu",
         square=True,
         cbar=False,
-        vmax=1,
+        vmax=vmax,
         vmin=minimum,
         fmt="s",
         center=0,
@@ -56,8 +77,12 @@ def plot_heatmaps(dfs, cbar=True):
         pvec = df.corrected_pvalue.values
         pvals = squareize(k, pvec)
         pvals[np.isnan(pvals)] = 1
-        plot_pvalues = np.log10(pvals)
-        plot_pvalues[np.isinf(plot_pvalues)] = -150
+        if ranked_pvalue:
+            plot_pvalues = pvals
+        else:
+            plot_pvalues = np.log10(pvals)
+            plot_pvalues[np.isinf(plot_pvalues)] = -150
+        
         # plot_pvalues[np.isnan(plot_pvalues)] = 0
 
         # Labels for x y axis
@@ -98,20 +123,39 @@ def plot_heatmaps(dfs, cbar=True):
         colors = im.get_children()[0].get_facecolors()
         raveled_idx = np.ravel_multi_index(triu_idx, plot_pvalues.shape)
         pad = 0.2
-        for idx, is_significant in zip(raveled_idx, df.significant):
+        
+        if ranked_pvalue:
+            zipped = zip(raveled_idx, (df.loc[:, ["significant", "ranked_significant"]].values))
+        else:
+            zipped=zip(raveled_idx, df.significant)
+        for idx, is_significant in zipped:
+            if ranked_pvalue:
+                is_significant, is_ranked_significant = is_significant
             i, j = np.unravel_index(idx, (k, k))
 
             # REF: seaborn heatmap
             lum = relative_luminance(colors[idx])
             text_color = ".15" if lum > 0.408 else "w"
             lw = 20 / k
+            
             if is_significant == True:
-                xs = [j + pad, j + 1 - pad]
-                ys = [i + pad, i + 1 - pad]
-                ax.plot(xs, ys, color=text_color, linewidth=lw)
-                xs = [j + 1 - pad, j + pad]
-                ys = [i + pad, i + 1 - pad]
-                ax.plot(xs, ys, color=text_color, linewidth=lw)
+                if ranked_pvalue:
+                    if is_ranked_significant == False:
+                        continue
+                    else:
+                        xs = [j + pad, j + 1 - pad]
+                        ys = [i + pad, i + 1 - pad]
+                        ax.plot(xs, ys, color=text_color, linewidth=lw)
+                        xs = [j + 1 - pad, j + pad]
+                        ys = [i + pad, i + 1 - pad]
+                        ax.plot(xs, ys, color=text_color, linewidth=lw)
+                else:
+                    xs = [j + pad, j + 1 - pad]
+                    ys = [i + pad, i + 1 - pad]
+                    ax.plot(xs, ys, color=text_color, linewidth=lw)
+                    xs = [j + 1 - pad, j + pad]
+                    ys = [i + pad, i + 1 - pad]
+                    ax.plot(xs, ys, color=text_color, linewidth=lw)
             elif np.isnan(is_significant):
                 circ = plt.Circle(
                     (j + 0.5, i + 0.5), 0.25, color=text_color, linewidth=lw, fill=False

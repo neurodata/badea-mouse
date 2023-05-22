@@ -21,6 +21,7 @@ sphinx:
   config:
     language: en
     bibtex_reference_style: author_year
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
@@ -47,5 +48,6 @@ parse:
   myst_enable_extensions: #https://myst-parser.readthedocs.io/en/latest/sphinx/reference.html#sphinx-config-options
     - linkify # automatically identify “bare” web URLs and add hyperlinks
     - dollarmath
+    - amsmath
   myst_nb_output_stderr:
     - "remove"
