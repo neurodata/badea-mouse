@@ -1,0 +1,1179 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>&lt;no title&gt; &#8212; Mouse Connectomes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2023-05-05-new-data';</script>
+    <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="coverpage.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/nd_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/nd_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="coverpage.html">
+                    Mouse Brain and Alzheimer’s Disease
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Brain Volume Covariances</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2022-01-28-volume-analysis.html">Brain Volume Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2022-03-15-multimodal-clustering.html">Test whether brain volume and FA are independent</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="2022-08-20-label-cmp.html">Comparing Subgroups of Edges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2022-11-17-volume-correlation-analysis-ranked.html">Exploratory analysis on volume correlations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2022-11-18-multigraph-clustering.html">Hierarchical Clustering Analysis - Omnibus Embedding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2023-01-10-nonpar.html">K-sample latent position distribution test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2023-03-01-volume-differences.html">Comparisons of differences in brain regions</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neurodata/badea-mouse" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neurodata/badea-mouse/issues/new?title=Issue%20on%20page%20%2F2023-05-05-new-data.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/2023-05-05-new-data.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><no title></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/new/studywide_stats_for_alex_27March2023/studywide_stats_for_volume.txt&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ROI</th>
+      <th>structure</th>
+      <th>N57437</th>
+      <th>N57442</th>
+      <th>N57446</th>
+      <th>N57447</th>
+      <th>N57449</th>
+      <th>N57451</th>
+      <th>N57496</th>
+      <th>N57498</th>
+      <th>...</th>
+      <th>N60131</th>
+      <th>N60139</th>
+      <th>N60163</th>
+      <th>N60159</th>
+      <th>N60157</th>
+      <th>N60127</th>
+      <th>N60161</th>
+      <th>N60169</th>
+      <th>N60137</th>
+      <th>N60129</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Cingulate_Cortex,_Area_24a</td>
+      <td>1.003104</td>
+      <td>1.113639</td>
+      <td>1.064340</td>
+      <td>1.007022</td>
+      <td>1.048029</td>
+      <td>1.085846</td>
+      <td>1.153460</td>
+      <td>1.074182</td>
+      <td>...</td>
+      <td>0.885462</td>
+      <td>0.946698</td>
+      <td>0.993900</td>
+      <td>0.903595</td>
+      <td>0.973215</td>
+      <td>0.931298</td>
+      <td>0.988251</td>
+      <td>1.061424</td>
+      <td>0.960640</td>
+      <td>0.889653</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Cingulate_Cortex,_Area_24a_prime</td>
+      <td>0.405233</td>
+      <td>0.394480</td>
+      <td>0.422547</td>
+      <td>0.417990</td>
+      <td>0.456627</td>
+      <td>0.463553</td>
+      <td>0.454805</td>
+      <td>0.434575</td>
+      <td>...</td>
+      <td>0.355114</td>
+      <td>0.398854</td>
+      <td>0.412796</td>
+      <td>0.390562</td>
+      <td>0.377258</td>
+      <td>0.367689</td>
+      <td>0.365776</td>
+      <td>0.426374</td>
+      <td>0.374797</td>
+      <td>0.350011</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Cingulate_Cortex,_Area_24b</td>
+      <td>0.809008</td>
+      <td>0.858124</td>
+      <td>0.870882</td>
+      <td>0.924919</td>
+      <td>0.847371</td>
+      <td>0.931753</td>
+      <td>0.777023</td>
+      <td>0.862134</td>
+      <td>...</td>
+      <td>0.742031</td>
+      <td>0.732554</td>
+      <td>0.737383</td>
+      <td>0.728727</td>
+      <td>0.836436</td>
+      <td>0.715605</td>
+      <td>0.625755</td>
+      <td>0.895850</td>
+      <td>0.759891</td>
+      <td>0.765359</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Cingulate_Cortex,_Area_24b_prime</td>
+      <td>0.283490</td>
+      <td>0.294972</td>
+      <td>0.315201</td>
+      <td>0.320031</td>
+      <td>0.309005</td>
+      <td>0.315201</td>
+      <td>0.308549</td>
+      <td>0.330966</td>
+      <td>...</td>
+      <td>0.240297</td>
+      <td>0.278660</td>
+      <td>0.278934</td>
+      <td>0.236287</td>
+      <td>0.275471</td>
+      <td>0.264171</td>
+      <td>0.235285</td>
+      <td>0.304175</td>
+      <td>0.256881</td>
+      <td>0.258066</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>Cingulate_Cortex,_Area_29a</td>
+      <td>0.243304</td>
+      <td>0.272008</td>
+      <td>0.216878</td>
+      <td>0.275927</td>
+      <td>0.247313</td>
+      <td>0.285130</td>
+      <td>0.222618</td>
+      <td>0.264354</td>
+      <td>...</td>
+      <td>0.254057</td>
+      <td>0.266632</td>
+      <td>0.245946</td>
+      <td>0.245764</td>
+      <td>0.289778</td>
+      <td>0.253601</td>
+      <td>0.263898</td>
+      <td>0.283854</td>
+      <td>0.242301</td>
+      <td>0.279936</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 211 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">node_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/raw/CHASSSYMM3AtlasLegends.xlsx&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">node_labels</span><span class="o">.</span><span class="n">index2</span> <span class="o">=</span> <span class="n">node_labels</span><span class="o">.</span><span class="n">index2</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;structure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_labels</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">node_labels</span><span class="o">.</span><span class="n">index2</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ROI&quot;</span><span class="p">]),</span> <span class="s2">&quot;Structure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ROI</th>
+      <th>structure</th>
+      <th>N57437</th>
+      <th>N57442</th>
+      <th>N57446</th>
+      <th>N57447</th>
+      <th>N57449</th>
+      <th>N57451</th>
+      <th>N57496</th>
+      <th>N57498</th>
+      <th>...</th>
+      <th>N60131</th>
+      <th>N60139</th>
+      <th>N60163</th>
+      <th>N60159</th>
+      <th>N60157</th>
+      <th>N60127</th>
+      <th>N60161</th>
+      <th>N60169</th>
+      <th>N60137</th>
+      <th>N60129</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Cingulate_Cortex_Area_24a</td>
+      <td>1.003104</td>
+      <td>1.113639</td>
+      <td>1.064340</td>
+      <td>1.007022</td>
+      <td>1.048029</td>
+      <td>1.085846</td>
+      <td>1.153460</td>
+      <td>1.074182</td>
+      <td>...</td>
+      <td>0.885462</td>
+      <td>0.946698</td>
+      <td>0.993900</td>
+      <td>0.903595</td>
+      <td>0.973215</td>
+      <td>0.931298</td>
+      <td>0.988251</td>
+      <td>1.061424</td>
+      <td>0.960640</td>
+      <td>0.889653</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Cingulate_Cortex_Area_24a_prime</td>
+      <td>0.405233</td>
+      <td>0.394480</td>
+      <td>0.422547</td>
+      <td>0.417990</td>
+      <td>0.456627</td>
+      <td>0.463553</td>
+      <td>0.454805</td>
+      <td>0.434575</td>
+      <td>...</td>
+      <td>0.355114</td>
+      <td>0.398854</td>
+      <td>0.412796</td>
+      <td>0.390562</td>
+      <td>0.377258</td>
+      <td>0.367689</td>
+      <td>0.365776</td>
+      <td>0.426374</td>
+      <td>0.374797</td>
+      <td>0.350011</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Cingulate_Cortex_Area_24b</td>
+      <td>0.809008</td>
+      <td>0.858124</td>
+      <td>0.870882</td>
+      <td>0.924919</td>
+      <td>0.847371</td>
+      <td>0.931753</td>
+      <td>0.777023</td>
+      <td>0.862134</td>
+      <td>...</td>
+      <td>0.742031</td>
+      <td>0.732554</td>
+      <td>0.737383</td>
+      <td>0.728727</td>
+      <td>0.836436</td>
+      <td>0.715605</td>
+      <td>0.625755</td>
+      <td>0.895850</td>
+      <td>0.759891</td>
+      <td>0.765359</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Cingulate_Cortex_Area_24b_prime</td>
+      <td>0.283490</td>
+      <td>0.294972</td>
+      <td>0.315201</td>
+      <td>0.320031</td>
+      <td>0.309005</td>
+      <td>0.315201</td>
+      <td>0.308549</td>
+      <td>0.330966</td>
+      <td>...</td>
+      <td>0.240297</td>
+      <td>0.278660</td>
+      <td>0.278934</td>
+      <td>0.236287</td>
+      <td>0.275471</td>
+      <td>0.264171</td>
+      <td>0.235285</td>
+      <td>0.304175</td>
+      <td>0.256881</td>
+      <td>0.258066</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>Cingulate_Cortex_Area_29a</td>
+      <td>0.243304</td>
+      <td>0.272008</td>
+      <td>0.216878</td>
+      <td>0.275927</td>
+      <td>0.247313</td>
+      <td>0.285130</td>
+      <td>0.222618</td>
+      <td>0.264354</td>
+      <td>...</td>
+      <td>0.254057</td>
+      <td>0.266632</td>
+      <td>0.245946</td>
+      <td>0.245764</td>
+      <td>0.289778</td>
+      <td>0.253601</td>
+      <td>0.263898</td>
+      <td>0.283854</td>
+      <td>0.242301</td>
+      <td>0.279936</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 211 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and basic data cleaning</span>
+<span class="n">mouse_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/new/qial_animals021423.xlsx&quot;</span><span class="p">)</span>
+<span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">mouse_df</span><span class="o">.</span><span class="n">Sex_other</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="p">[</span><span class="s2">&quot;Sex_other&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">mouse_df</span><span class="o">.</span><span class="n">Sex_other</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="o">.</span><span class="n">Sex_other</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+
+<span class="n">missing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="p">))</span>
+
+<span class="n">mouse_df</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="p">[</span><span class="o">~</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span>
+<span class="n">mouse_df</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="p">[</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">Geno</span> <span class="o">!=</span> <span class="s2">&quot;CVN&quot;</span><span class="p">]</span>
+<span class="n">mouse_df</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="p">[</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">Geno</span> <span class="o">!=</span> <span class="s2">&quot;HN&quot;</span><span class="p">]</span>
+
+<span class="n">valid_subjects</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="p">)]</span>
+<span class="n">mouse_df</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="p">[</span><span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">valid_subjects</span><span class="p">)]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;ROI&quot;</span><span class="p">,</span> <span class="s2">&quot;structure&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">mouse_df</span><span class="o">.</span><span class="n">DWI</span><span class="o">.</span><span class="n">to_list</span><span class="p">()]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(332, 171)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span> <span class="o">=</span> <span class="n">mouse_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;DWI&quot;</span><span class="p">,</span> <span class="s2">&quot;Geno&quot;</span><span class="p">,</span> <span class="s2">&quot;Sex_other&quot;</span><span class="p">,</span> <span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">,</span> <span class="s2">&quot;Age_Imaging&quot;</span><span class="p">]]</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">columns</span>  <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Genotype&quot;</span><span class="p">,</span> <span class="s2">&quot;Sex&quot;</span><span class="p">,</span> <span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;HN&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Genotype&quot;</span><span class="p">]:</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;Genotype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Genotype&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;Allele&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;HN&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;Allele&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Non-HN&quot;</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Genotype</th>
+      <th>Sex</th>
+      <th>Weight</th>
+      <th>Diet</th>
+      <th>Age</th>
+      <th>Allele</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>N57437</td>
+      <td>APOE44</td>
+      <td>Male</td>
+      <td>30.7</td>
+      <td>Control</td>
+      <td>16.2</td>
+      <td>Non-HN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>N57442</td>
+      <td>APOE44</td>
+      <td>Female</td>
+      <td>25.6</td>
+      <td>Control</td>
+      <td>16.2</td>
+      <td>Non-HN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>N57446</td>
+      <td>APOE44</td>
+      <td>Male</td>
+      <td>32.1</td>
+      <td>Control</td>
+      <td>16.2</td>
+      <td>Non-HN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>N57447</td>
+      <td>APOE44</td>
+      <td>Female</td>
+      <td>28.7</td>
+      <td>Control</td>
+      <td>16.2</td>
+      <td>Non-HN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>N57449</td>
+      <td>APOE44</td>
+      <td>Male</td>
+      <td>31.6</td>
+      <td>Control</td>
+      <td>16.2</td>
+      <td>Non-HN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/new/processed/volumes.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/new/processed/meta.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">Genotype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;APOE44&#39;, &#39;APOE22&#39;, &#39;APOE33&#39;, &#39;APOE33HN&#39;, &#39;APOE44HN&#39;, &#39;APOE22HN&#39;],
+      dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span><span class="p">[[</span><span class="s2">&quot;Genotype&quot;</span><span class="p">,</span> <span class="s2">&quot;Sex&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">,</span> <span class="s2">&quot;Allele&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Genotype&quot;</span><span class="p">,</span> <span class="s2">&quot;Sex&quot;</span><span class="p">,</span><span class="s2">&quot;Allele&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>ID</th>
+    </tr>
+    <tr>
+      <th>Genotype</th>
+      <th>Sex</th>
+      <th>Allele</th>
+      <th>Diet</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="6" valign="top">APOE22</th>
+      <th rowspan="3" valign="top">Female</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>Non-HN</th>
+      <th>Control</th>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">Male</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>Non-HN</th>
+      <th>Control</th>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th rowspan="8" valign="top">APOE33</th>
+      <th rowspan="4" valign="top">Female</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Non-HN</th>
+      <th>Control</th>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">Male</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Non-HN</th>
+      <th>Control</th>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">APOE44</th>
+      <th rowspan="3" valign="top">Female</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>Non-HN</th>
+      <th>Control</th>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">Male</th>
+      <th rowspan="2" valign="top">HN</th>
+      <th>Control</th>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>HFD</th>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>Non-HN</th>
+      <th>Control</th>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Genotype&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">meta</span><span class="p">[[</span><span class="s2">&quot;Sex&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7faf394f2520&gt;
+</pre></div>
+</div>
+<img alt="_images/e5480a089baa6353d936675b90aa47f0b652ed4c8e31dc794a22e83335859986.png" src="_images/e5480a089baa6353d936675b90aa47f0b652ed4c8e31dc794a22e83335859986.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="n">meta</span><span class="o">.</span><span class="n">Diet</span> <span class="o">==</span> <span class="s2">&quot;Control&quot;</span><span class="p">]</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">tmp</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Genotype&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">tmp</span><span class="p">[[</span><span class="s2">&quot;Sex&quot;</span><span class="p">,</span> <span class="s2">&quot;Diet&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7faf393d9a00&gt;
+</pre></div>
+</div>
+<img alt="_images/dc778930929deba1a76bb98d22842035bd2f8469b5d164346d5c4fe9ee8cf543.png" src="_images/dc778930929deba1a76bb98d22842035bd2f8469b5d164346d5c4fe9ee8cf543.png" />
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jaewon Chung, Eric B. Bridgeford
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
