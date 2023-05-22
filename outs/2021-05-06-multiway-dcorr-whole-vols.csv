@@ -1,0 +1,17 @@
+,Multiway,APOE2,APOE3,APOE4,Sex,Allele,pval,K,corrected_pval
+12 | X | X | X | X | X | X | ,True,True,True,True,True,True,1.3247126992707026e-10,12,2.119540318833124e-09
+8 | X | X | X |   | X | X | ,True,True,True,False,True,True,5.1713559649943194e-08,8,8.274169543990911e-07
+8 | X | X |   | X | X | X | ,True,True,False,True,True,True,3.7767568859776736e-08,8,6.042811017564278e-07
+8 | X |   | X | X | X | X | ,True,False,True,True,True,True,5.860784190890689e-08,8,9.377254705425102e-07
+6 | X | X | X | X | X |   | ,True,True,True,True,True,False,1.791157444810773e-09,6,2.865851911697237e-08
+6 | X | X | X | X |   | X | ,True,True,True,True,False,True,1.2071715895739026e-08,6,1.9314745433182442e-07
+4 | X | X | X |   | X |   | ,True,True,True,False,True,False,3.9600008712671274e-07,4,6.336001394027404e-06
+4 | X | X | X |   |   | X | ,True,True,True,False,False,True,1.106136817652956e-06,4,1.7698189082447296e-05
+4 | X | X |   | X | X |   | ,True,True,False,True,True,False,1.9328380064973686e-07,4,3.0925408103957898e-06
+4 | X | X |   | X |   | X | ,True,True,False,True,False,True,3.2490082549907298e-06,4,5.1984132079851676e-05
+4 | X |   | X | X | X |   | ,True,False,True,True,True,False,1.7229101537093036e-06,4,2.7566562459348858e-05
+4 | X |   | X | X |   | X | ,True,False,True,True,False,True,1.0688219831566206e-07,4,1.7101151730505929e-06
+3 |   | X | X | X |   |   | ,False,True,True,True,False,False,2.3578767939076062e-07,3,3.77260287025217e-06
+2 |   | X | X |   |   |   | ,False,True,True,False,False,False,1.6301924845997578e-05,2,0.00026083079753596124
+2 |   | X |   | X |   |   | ,False,True,False,True,False,False,2.353924039920055e-05,2,0.0003766278463872088
+2 |   |   | X | X |   |   | ,False,False,True,True,False,False,3.1845442263472618e-06,2,5.095270762155619e-05
