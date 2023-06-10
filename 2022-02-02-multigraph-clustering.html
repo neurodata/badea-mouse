@@ -833,8 +833,8 @@ document.write(`
 <section id="testing-for-significantly-different-clusters-at-various-levels">
 <h2>Testing for significantly different clusters at various levels<a class="headerlink" href="#testing-for-significantly-different-clusters-at-various-levels" title="Permalink to this heading">#</a></h2>
 <p>Again, the clusters tell us which regions should be grouped together. Hence, each cluster forms our subgraph. For each subgraph, we test whether the distribution of the latent positions (aka the embeddings) are significantly different. Specifically we test</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0ae8f993-8354-4f15-9365-881fb535b193">
-<span class="eqno">()<a class="headerlink" href="#equation-0ae8f993-8354-4f15-9365-881fb535b193" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-83bd54a7-b920-4cd4-bedf-0d8785b025ce">
+<span class="eqno">()<a class="headerlink" href="#equation-83bd54a7-b920-4cd4-bedf-0d8785b025ce" title="Permalink to this equation">#</a></span>\[\begin{align}
 H_0:&amp; \qquad F_{APOE2}=F_{APOE3}=F_{APOE4}\\
 H_A:&amp; \qquad \text{At least one pair of distributions is different}
 \end{align}\]</div>
@@ -1026,8 +1026,8 @@ H_A:&amp; \qquad \text{At least one pair of distributions is different}
 <section id="testing-for-differences-in-pairwise-subgraph-covariances">
 <h3>Testing for differences in pairwise subgraph covariances<a class="headerlink" href="#testing-for-differences-in-pairwise-subgraph-covariances" title="Permalink to this heading">#</a></h3>
 <p>The test above tells us whether a pair, or all, genotypes are different. For example, a significant result may mean that APOE2 and APOE3 are different. However, it is also possible that APOE2, APOE3, and APOE4 are all different. To figure out which pairs are different, we do a post-hoc pairwise test. That is, for each cluster (aka subgraph), we test whether each pair of genotypes are different. Specifically,</p>
-<div class="amsmath math notranslate nohighlight" id="equation-9ac015d7-a768-4d28-8fa4-0b70f64de5da">
-<span class="eqno">()<a class="headerlink" href="#equation-9ac015d7-a768-4d28-8fa4-0b70f64de5da" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-72008b0e-01b1-41f5-b9c1-0a9f1dabe14f">
+<span class="eqno">()<a class="headerlink" href="#equation-72008b0e-01b1-41f5-b9c1-0a9f1dabe14f" title="Permalink to this equation">#</a></span>\[\begin{align}
 H_0:&amp; \qquad F_{i}=F_{j}\\
 H_A:&amp; \qquad F_i \neq F_j
 \end{align}\]</div>
