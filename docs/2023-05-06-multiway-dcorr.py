@@ -1,13 +1,14 @@
 # %%
+from itertools import combinations
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from hyppo.independence import Dcorr
+from hyppo.tools import chi2_approx
 from sklearn.preprocessing import OneHotEncoder
-
 from statsmodels.stats.multitest import multipletests
-from itertools import combinations
 
 # %%
 volumes = pd.read_csv("../data/new/processed/volumes.csv")
@@ -74,35 +75,55 @@ for test in TEST_LIST:
 
     x = vols[idx]
     y = test_multiway_table[idx]
-
     tmp_res = []
     for i in range(x.shape[1]):
-        stat, pval = Dcorr().test(x[:, i], y)
+        stat, pval = chi2_approx(Dcorr().statistic, x[:, [i]], y)
         tmp_res.append(pval)
 
     apoe2 = True if "Genotype_APOE22" in test else False
     apoe3 = True if "Genotype_APOE33" in test else False
     apoe4 = True if "Genotype_APOE44" in test else False
-    sex = True if "Sex_Female" in test else False
-    allele = True if "Allele_HN" in test else False
-    multiway = True if sex or allele else False
+    female = True if "Sex_Female" in test else False
+    male = True if "Sex_Male" in test else False
+    hn = True if "Allele_HN" in test else False
+    non_hn = True if "Allele_Non-HN" in test else False
+    multiway = True if (female and male) or (hn and non_hn) else False
 
-    res.append([multiway, apoe2, apoe3, apoe4, sex, allele, *tmp_res])
+    n = x.shape[0]
 
+    res.append(
+        [
+            multiway,
+            apoe2,
+            apoe3,
+            apoe4,
+            female,
+            male,
+            hn,
+            non_hn,
+            n,
+            *tmp_res,
+        ]
+    )
 
 columns = [
     "Multiway",
     "APOE2",
     "APOE3",
     "APOE4",
-    "Sex",
-    "Allele",
+    "Female",
+    "Male",
+    "HN",
+    "Non-HN",
+    "N",
 ] + volumes.structure.to_list()
 
 df = pd.DataFrame(res, columns=columns)
 
 df["K"] = (
-    (df[["APOE2", "APOE3", "APOE4"]].sum(axis=1)) * (df["Sex"] + 1) * (df["Allele"] + 1)
+    (df[["APOE2", "APOE3", "APOE4"]].sum(axis=1))
+    * (df[["Female", "Male"]].sum(axis=1))
+    * (df[["HN", "Non-HN"]].sum(axis=1))
 )
 
 df.sort_values(by="K", inplace=True, ascending=False)
