@@ -131,7 +131,17 @@ df.sort_values(by="K", inplace=True, ascending=False)
 i_new = []
 for idx, row in df.iterrows():
     index = ""
-    for col in ["K", "Multiway", "APOE2", "APOE3", "APOE4", "Sex", "Allele"]:
+    for col in [
+        "K",
+        "Multiway",
+        "APOE2",
+        "APOE3",
+        "APOE4",
+        "Female",
+        "Male",
+        "HN",
+        "Non-HN",
+    ]:
         if col == "K":
             index += str(row[col]) + " | "
         else:
@@ -143,13 +153,13 @@ for idx, row in df.iterrows():
 
 df.index = i_new
 
-pvalues = df.iloc[:, 6:-1].copy()
+pvalues = df.iloc[:, 9:-1].copy()
 
 sig, corrected_pvals, b, alpha = multipletests(
     pvalues.values.ravel(), method="bonferroni"
 )
 
-pvalues.iloc[:, :] = corrected_pvals.reshape(16, -1)
+pvalues.iloc[:, :] = corrected_pvals.reshape(40, -1)
 mask = np.select([pvalues < 0.05, pvalues >= 0.05], ["X", ""], default=pvalues)
 
 
