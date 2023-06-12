@@ -172,6 +172,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="2023-03-01-volume-differences.html">Comparisons of differences in brain regions</a></li>
 
 
+<li class="toctree-l1"><a class="reference internal" href="2023-05-10-combined.html">Investigation of Distances of Brain Volume and FA</a></li>
 </ul>
 
     </div>
@@ -807,8 +808,8 @@ if (outputEl) {{
 <section id="testing-for-significantly-different-clusters-at-various-levels">
 <h2>Testing for significantly different clusters at various levels<a class="headerlink" href="#testing-for-significantly-different-clusters-at-various-levels" title="Permalink to this heading">#</a></h2>
 <p>Again, the clusters tell us which regions should be grouped together. Hence, each cluster forms our subgraph. For each subgraph, we test whether the distribution of the latent positions (aka the embeddings) are significantly different. Specifically we test</p>
-<div class="amsmath math notranslate nohighlight" id="equation-419f669c-04d5-4e7a-bfdd-ecff6461174b">
-<span class="eqno">()<a class="headerlink" href="#equation-419f669c-04d5-4e7a-bfdd-ecff6461174b" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-69ad49d4-3456-4d62-9e54-e72e7e0c39ca">
+<span class="eqno">()<a class="headerlink" href="#equation-69ad49d4-3456-4d62-9e54-e72e7e0c39ca" title="Permalink to this equation">#</a></span>\[\begin{align}
 H_0:&amp; \qquad F_{APOE2}=F_{APOE3}=F_{APOE4}\\
 H_A:&amp; \qquad \text{At least one pair of distributions is different}
 \end{align}\]</div>
