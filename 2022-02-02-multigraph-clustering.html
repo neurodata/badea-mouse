@@ -169,10 +169,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="2022-11-17-volume-correlation-analysis-ranked.html">Exploratory analysis on volume correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2022-11-18-multigraph-clustering.html">Hierarchical Clustering Analysis - Omnibus Embedding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2023-01-10-nonpar.html">K-sample latent position distribution test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2023-03-01-volume-differences.html">Comparisons of differences in brain regions</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="2023-05-10-combined.html">Investigation of Distances of Brain Volume and FA</a></li>
 </ul>
 
     </div>
@@ -834,8 +830,8 @@ document.write(`
 <section id="testing-for-significantly-different-clusters-at-various-levels">
 <h2>Testing for significantly different clusters at various levels<a class="headerlink" href="#testing-for-significantly-different-clusters-at-various-levels" title="Permalink to this heading">#</a></h2>
 <p>Again, the clusters tell us which regions should be grouped together. Hence, each cluster forms our subgraph. For each subgraph, we test whether the distribution of the latent positions (aka the embeddings) are significantly different. Specifically we test</p>
-<div class="amsmath math notranslate nohighlight" id="equation-acf9c6aa-8f83-4b16-8f62-e723b1274578">
-<span class="eqno">()<a class="headerlink" href="#equation-acf9c6aa-8f83-4b16-8f62-e723b1274578" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-ba38f418-70f1-40e5-aeb1-a531e63bae5f">
+<span class="eqno">()<a class="headerlink" href="#equation-ba38f418-70f1-40e5-aeb1-a531e63bae5f" title="Permalink to this equation">#</a></span>\[\begin{align}
 H_0:&amp; \qquad F_{APOE2}=F_{APOE3}=F_{APOE4}\\
 H_A:&amp; \qquad \text{At least one pair of distributions is different}
 \end{align}\]</div>
@@ -1027,8 +1023,8 @@ H_A:&amp; \qquad \text{At least one pair of distributions is different}
 <section id="testing-for-differences-in-pairwise-subgraph-covariances">
 <h3>Testing for differences in pairwise subgraph covariances<a class="headerlink" href="#testing-for-differences-in-pairwise-subgraph-covariances" title="Permalink to this heading">#</a></h3>
 <p>The test above tells us whether a pair, or all, genotypes are different. For example, a significant result may mean that APOE2 and APOE3 are different. However, it is also possible that APOE2, APOE3, and APOE4 are all different. To figure out which pairs are different, we do a post-hoc pairwise test. That is, for each cluster (aka subgraph), we test whether each pair of genotypes are different. Specifically,</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0ef91d5a-2d77-4a7a-8a74-a868e22966fb">
-<span class="eqno">()<a class="headerlink" href="#equation-0ef91d5a-2d77-4a7a-8a74-a868e22966fb" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b2012769-1b44-458a-b56c-d3dde07b10ce">
+<span class="eqno">()<a class="headerlink" href="#equation-b2012769-1b44-458a-b56c-d3dde07b10ce" title="Permalink to this equation">#</a></span>\[\begin{align}
 H_0:&amp; \qquad F_{i}=F_{j}\\
 H_A:&amp; \qquad F_i \neq F_j
 \end{align}\]</div>
